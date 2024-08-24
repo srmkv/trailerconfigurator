@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "srmkv",
+    "password": "nTgp$uvrm!",
+    "database": "trailer_db",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "192.168.0.11",
+    "dialect": "mariadb"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "192.168.0.11",
+    "dialect": "mariadb"
+  }
+}
