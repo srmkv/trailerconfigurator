@@ -1,82 +1,117 @@
-//#region Module import
-const trailerRoute = require('express').Router();
-const { Trailer } = require('../models')
-//#endregion
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+const multer = require('multer');
+const { Trailer } = require('../models');
 
-
-//#region Get Methods
-trailerRoute.get('/api/trailer/getAll', async (req, res) => {
+// Функция для создания директории, если она не существует
+const createDir = (dir) => {
     try {
-        let data = await Trailer.findAll();
-        return (data && data.length > 0 ? res.send({ status: true, data }) : res.send({ status: false, message: 'No data found' }))
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+            console.log(`Directory created: ${dir}`); // Логирование создания директории
+        } else {
+            console.log(`Directory already exists: ${dir}`); // Логирование существующей директории
+        }
+    } catch (err) {
+        console.error(`Error creating directory ${dir}:`, err);
     }
-    catch (e) {
-        console.log(e)
-        res.send({ status: false, message: 'Something went wrong.' })
+};
+
+// Настройка хранения файлов с помощью multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const name = req.body.Name || 'default'; // Используйте значение по умолчанию, если `Name` не определен
+        let dir = path.join(__dirname, '../uploads', name);
+
+        // Создайте директорию, если она не существует
+        createDir(dir);
+        cb(null, dir);
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname);
     }
 });
 
+const upload = multer({ storage });
 
-trailerRoute.get('/api/trailer/getTrailerById/:_id', async (req, res) => {
+const trailerRoute = express.Router();
+
+// Получение всех трейлеров
+trailerRoute.get('/api/trailer/getAll', async (req, res) => {
     try {
-        let { _id } = req.params;
-        let data = await Trailer.findOne({
-            where: { _id },
-        });
-        return (data ? res.send({ status: true, data }) : res.send({ status: false, message: 'No data found' }))
+        const data = await Trailer.findAll();
+        res.json({ status: true, data });
+    } catch (e) {
+        console.error('Error fetching trailers:', e);
+        res.status(500).send('Server error');
     }
-    catch (e) {
-        console.log(e);
-        res.send({ status: false, message: 'Something went wrong.' })
+});
+
+// Добавление или редактирование трейлера
+trailerRoute.post('/api/trailer/addEditTrailer', upload.fields([
+    { name: 'FrontImg', maxCount: 1 },
+    { name: 'BackImg', maxCount: 1 }
+]), async (req, res) => {
+    console.log('Files:', req.files); // Для отладки
+    console.log('Body:', req.body); // Для отладки
+
+    const { actionType, _id, Name, Price, Description } = req.body;
+
+    if (!Name || !Price || !Description) {
+        return res.status(400).send('Missing required fields');
     }
-})
-//#endregion
 
+    // Обработка изображений
+    const FrontImg = req.files['FrontImg'] ? `/uploads/${Name}/${req.files['FrontImg'][0].filename}` : null;
+    const BackImg = req.files['BackImg'] ? `/uploads/${Name}/${req.files['BackImg'][0].filename}` : null;
+    console.log('FrontImg:', FrontImg); // Для отладки
 
-//#region Post Methods
-trailerRoute.post('/api/trailer/addEditTrailer', async (req, res) => {
     try {
-        let { actionType, _id, Name, Price, Description, FrontImg ,BackImg } = req.body;
-
         if (actionType === 'edit') {
-
-            let data = await Trailer.update({  Name, Price, Description, FrontImg ,BackImg },{ where: { _id } });
-            res.send({ status: true, message: 'Trailer  updated successfully' })
+            await Trailer.update({ Name, Price, Description, FrontImg, BackImg }, { where: { _id } });
+            res.send({ status: true, message: 'Trailer updated successfully' });
+        } else {
+            const trailer = await Trailer.create({ Name, Price, Description, FrontImg, BackImg });
+            res.send({ status: true, message: 'Trailer added successfully', data: trailer });
         }
-        else {
-            let data = await Trailer.create({  Name, Price, Description, FrontImg ,BackImg })
-            res.send({ status: true, message: 'Trailer  inserted successfully' })
-        }
+    } catch (e) {
+        console.error('Error saving trailer:', e);
+        res.status(500).send('Server error');
     }
-    catch (e) {
-        console.log(e)
-        res.send({ status: false, message: 'Something went wrong.' })
-    }
-})
+});
 
+// Удаление трейлера
 trailerRoute.post('/api/trailer/deleteTrailer', async (req, res) => {
-    try {
-        let { _id } = req.body
+    const { _id } = req.body;
+    if (!_id) {
+        return res.status(400).send('Missing ID');
+    }
 
-        if (_id) {
-            const data = await Trailer.findOne({ where: { _id } })
-            if (data) {
-                await data.destroy()
-                res.send({ status: true, message: 'Trailer  deleted successfully' })
+    try {
+        const trailer = await Trailer.findByPk(_id);
+        if (trailer) {
+            // Удаление файлов
+            const dir = path.join(__dirname, '../uploads', trailer.Name);
+            
+            // Проверяем, существует ли директория перед её удалением
+            if (fs.existsSync(dir)) {
+                fs.rmdirSync(dir, { recursive: true });
+                console.log(`Directory deleted: ${dir}`); // Логирование удаления директории
+            } else {
+                console.warn(`Directory ${dir} does not exist`);
             }
-            else {
-                res.send({ status: false, message: "Trailer  doesn't exists." })
-            }
+
+            // Удаление из базы данных
+            await Trailer.destroy({ where: { _id } });
+            res.send({ status: true, message: 'Trailer deleted successfully' });
+        } else {
+            res.status(404).send('Trailer not found');
         }
-        else {
-            res.send({ status: false, message: "Trailer  id is required." })
-        }
+    } catch (e) {
+        console.error('Error deleting trailer:', e);
+        res.status(500).send('Server error');
     }
-    catch (e) {
-        console.log(e)
-        res.send({ status: false, message: 'Something went wrong.' })
-    }
-})
-//#endregion
+});
 
 module.exports = trailerRoute;

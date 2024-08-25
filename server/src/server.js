@@ -13,6 +13,10 @@ app.use(bodyParser.json());
 
 app.use(userRoute);
 app.use(trailerRoute);
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
 
 const port = process.env.PORT || 5000;
 
