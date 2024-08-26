@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Users from "./Users";
 import Trailers from "./Trailers";
 import TrailersList from './components/TrailersList';
-import OptionsList from './components/OptionsList';
+import TrailersWithOptions from './components/TrailersWithOptions';
 function App() {
   return (
     <Router>
@@ -25,7 +25,7 @@ function App() {
           <Route path="/" element={<TrailersList />} />
           <Route path="/users" element={<Users />} />
           <Route path="/trailers" element={<Trailers />} />
-          <Route path="/options" element={<OptionsList />} />
+          <Route path="/options" element={<TrailersWithOptions />} />
         </Routes>
       </div>
     </Router>

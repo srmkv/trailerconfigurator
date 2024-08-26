@@ -22,7 +22,7 @@ const createDir = (dir) => {
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const name = req.body.Name || 'default'; // Используйте значение по умолчанию, если `Name` не определен
-        let dir = path.join(__dirname, '../uploads', name);
+        let dir = path.join(__dirname, '../../client/public/uploads', name);
 
         // Создайте директорию, если она не существует
         createDir(dir);
