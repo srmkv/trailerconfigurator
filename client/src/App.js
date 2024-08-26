@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Users from "./Users";
 import Trailers from "./Trailers";
 import TrailersList from './components/TrailersList';
+import OptionsList from './components/OptionsList';
 function App() {
   return (
     <Router>
@@ -15,12 +16,16 @@ function App() {
             <li>
               <Link to="/trailers">Trailers</Link>
             </li>
+            <li>
+              <Link to="/options">Options</Link> 
+            </li>
           </ul>
         </nav>
         <Routes>
           <Route path="/" element={<TrailersList />} />
           <Route path="/users" element={<Users />} />
           <Route path="/trailers" element={<Trailers />} />
+          <Route path="/options" element={<OptionsList />} />
         </Routes>
       </div>
     </Router>

@@ -3,8 +3,15 @@ const { Model } = require('sequelize');
  
 module.exports = (sequelize, DataTypes) => {
   class Trailer extends Model {
-  
-  };
+    static associate(models) {
+      // Связь "многие ко многим" с моделью Option через таблицу TrailerOptions
+      this.belongsToMany(models.Option, {
+        through: 'TrailerOptions',
+       foreignKey: 'trailerId',  // Правильное имя внешнего ключа
+        otherKey: 'optionId',     // Правильное имя внешнего ключа
+      });
+    }
+  }
   Trailer.init({
     _id: {
       allowNull: false,
