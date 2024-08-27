@@ -27,7 +27,13 @@ function Trailers() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isOptionsModalVisible, setIsOptionsModalVisible] = useState(false);
   const [selectedTrailerId, setSelectedTrailerId] = useState(null);
-  const [optionFormValues, setOptionFormValues] = useState({ name: "", description: "" });
+  const [optionFormValues, setOptionFormValues] = useState({ 
+    id: "", 
+    name: "", 
+    description: "", 
+    price: "", 
+    image: "" 
+  });
 
   useEffect(() => {
     getMainList();
@@ -49,22 +55,21 @@ function Trailers() {
     }
   };
 
-const getOptionsForTrailer = async (trailerId) => {
-  try {
-    const response = await axios.get(`${baseURL}${getOptionsAPIName}?trailerId=${trailerId}`);
-    console.log("Options response:", response.data); // Логирование для проверки
-    const { status, data } = response.data;
-    if (status) {
-      setOptions(data); // Загружаем только отфильтрованные опции
-    } else {
-      setOptions([]);
+  const getOptionsForTrailer = async (trailerId) => {
+    try {
+      const response = await axios.get(`${baseURL}${getOptionsAPIName}?trailerId=${trailerId}`);
+      console.log("Options response:", response.data); // Логирование для проверки
+      const { status, data } = response.data;
+      if (status) {
+        setOptions(data); // Загружаем только отфильтрованные опции
+      } else {
+        setOptions([]);
+      }
+    } catch (error) {
+      console.error('Error fetching options:', error);
+      AntMessage.error('Error fetching options.');
     }
-  } catch (error) {
-    console.error('Error fetching options:', error);
-    AntMessage.error('Error fetching options.');
-  }
-};
-
+  };
 
   const handleOk = async () => {
     const formData = new FormData();
@@ -97,41 +102,58 @@ const getOptionsForTrailer = async (trailerId) => {
     }
   };
 
-const handleClickOptions = (trailer) => {
-  setSelectedTrailerId(trailer._id);
-  getOptionsForTrailer(trailer._id);
-  setIsOptionsModalVisible(true);
-};
+  const handleClickOptions = (trailer) => {
+    setSelectedTrailerId(trailer._id);
+    getOptionsForTrailer(trailer._id);
+    setIsOptionsModalVisible(true);
+  };
 
-const handleOptionsOk = async () => {
-  const { name, description } = optionFormValues;
+ const handleOptionsOk = async () => {
+  const formData = new FormData();
+  formData.append('name', optionFormValues.name);
+  formData.append('description', optionFormValues.description);
+  formData.append('price', optionFormValues.price);
+  formData.append('trailerId', selectedTrailerId);
 
-  if (!name || !description) {
-    AntMessage.error('All fields are required.');
-    return;
+  if (optionFormValues.image) {
+    formData.append('image', optionFormValues.image);
+    console.log("Image file appended:", optionFormValues.image);
+  } else {
+    console.log("No image file selected.");
   }
 
   try {
+    let response;
     if (optionFormValues.id) {
-      await axios.post(`${baseURL}${editOptionAPIName}`, { ...optionFormValues, trailerId: selectedTrailerId });
-      AntMessage.success('Option updated successfully');
+      formData.append('id', optionFormValues.id);
+      response = await axios.post(`${baseURL}${editOptionAPIName}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
     } else {
-      await axios.post(`${baseURL}${addOptionAPIName}`, { ...optionFormValues, trailerId: selectedTrailerId });
-      AntMessage.success('Option added successfully');
+      response = await axios.post(`${baseURL}${addOptionAPIName}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
     }
-    handleOptionsCancel();
-    getOptionsForTrailer(selectedTrailerId);
+
+    const { status, message } = response.data;
+    if (status) {
+      AntMessage.success(optionFormValues.id ? 'Option updated successfully' : 'Option added successfully');
+      handleOptionsCancel();
+      getOptionsForTrailer(selectedTrailerId);
+    } else {
+      AntMessage.error(message);
+    }
   } catch (error) {
     console.error('Error submitting option form:', error);
     AntMessage.error('Something went wrong.');
   }
 };
 
+
   const handleOptionsCancel = () => {
-    setOptionFormValues({ name: "", description: "" });
+    setOptionFormValues({ name: "", description: "", price: "", image: "" });
     setIsOptionsModalVisible(false);
   };
-
 
   const handleInputChange = (e) => {
     setAddEditFormValues({
@@ -155,6 +177,16 @@ const handleOptionsOk = async () => {
       ...optionFormValues,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleOptionFileChange = (e) => {
+    const { name, files } = e.target;
+    if (files && files[0]) {
+      setOptionFormValues(prevValues => ({
+        ...prevValues,
+        [name]: files[0]
+      }));
+    }
   };
 
   const handleClickEdit = (data) => {
@@ -190,28 +222,28 @@ const handleOptionsOk = async () => {
     });
   };
 
- const handleClickOptionDelete = async (optionId) => {
-  Modal.confirm({
-    title: "Confirm",
-    content: "Are you sure you want to delete this option?",
-    okText: "Delete",
-    onOk: async () => {
-      try {
-        const response = await axios.post(`${baseURL}${deleteOptionAPIName}`, { id: optionId, trailerId: selectedTrailerId });
-        const { status, message } = response.data;
-        if (status) {
-          AntMessage.success(message);
-          getOptionsForTrailer(selectedTrailerId);
-        } else {
-          AntMessage.error(message);
+  const handleClickOptionDelete = async (optionId) => {
+    Modal.confirm({
+      title: "Confirm",
+      content: "Are you sure you want to delete this option?",
+      okText: "Delete",
+      onOk: async () => {
+        try {
+          const response = await axios.post(`${baseURL}${deleteOptionAPIName}`, { id: optionId, trailerId: selectedTrailerId });
+          const { status, message } = response.data;
+          if (status) {
+            AntMessage.success(message);
+            getOptionsForTrailer(selectedTrailerId);
+          } else {
+            AntMessage.error(message);
+          }
+        } catch (error) {
+          console.error('Error deleting option:', error);
+          AntMessage.error('Something went wrong.');
         }
-      } catch (error) {
-        console.error('Error deleting option:', error);
-        AntMessage.error('Something went wrong.');
       }
-    }
-  });
-};
+    });
+  };
 
   const renderImagePreview = (file) => {
     if (file instanceof Blob) {
@@ -238,15 +270,29 @@ const handleOptionsOk = async () => {
   ];
 
   const optionsColumns = [
+
     { title: "Option Name", dataIndex: "name", key: "name" },
     { title: "Option Description", dataIndex: "description", key: "description" },
+    { title: "Option Price", dataIndex: "price", key: "price" },
+    {
+      title: "Option Image",
+      dataIndex: "image",
+      key: "image",
+      render: (image) => (
+        <img
+          src={image ? `${image}` : null}
+          alt="Option"
+          style={{ width: '100px', height: '100px' }}
+        />
+      )
+    },
     {
       title: "Action",
       key: "action",
       render: (text, record) => (
         <>
           <Button type="primary" onClick={() => {
-            setOptionFormValues({ id: record.id, name: record.name, description: record.description });
+            setOptionFormValues({ id: record.id, name: record.name, description: record.description, price: record.price, image: record.image });
             setIsOptionsModalVisible(true);
           }}>Edit</Button>{" "}
           <Button type="danger" onClick={() => handleClickOptionDelete(record.id)}>Delete</Button>
@@ -356,6 +402,14 @@ const handleOptionsOk = async () => {
               onChange={handleOptionInputChange}
             />
           </Form.Item>
+          <Form.Item label="Option Price">
+            <Input
+              placeholder="Option Price"
+              name="price"
+              value={optionFormValues.price}
+              onChange={handleOptionInputChange}
+            />
+          </Form.Item>
           <Form.Item label="Option Description">
             <Input
               placeholder="Option Description"
@@ -363,6 +417,21 @@ const handleOptionsOk = async () => {
               value={optionFormValues.description}
               onChange={handleOptionInputChange}
             />
+          </Form.Item>
+          <Form.Item label="Option Image">
+            <input
+              type="file"
+              name="image"
+              accept="image/*"
+              onChange={handleOptionFileChange}
+            />
+            {optionFormValues.image && (
+              <img
+                src={renderImagePreview(optionFormValues.image)}
+                alt="Option"
+                style={{ width: '100px', height: '100px', marginTop: '10px' }}
+              />
+            )}
           </Form.Item>
           <Form.Item>
             <Button type="primary" onClick={handleOptionsOk}>

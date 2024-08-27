@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Card, Col, Row, message as AntMessage } from 'antd';
+import { Card, Col, Row, Checkbox, message as AntMessage } from 'antd';
 
 const baseURL = "http://95.79.52.15:26336/";
 
 const TrailersWithOptions = () => {
   const [trailers, setTrailers] = useState([]);
   const [options, setOptions] = useState({});
+  const [selectedOptions, setSelectedOptions] = useState({});
+  const [trailerPrices, setTrailerPrices] = useState({});
 
   const fetchTrailers = async () => {
     try {
@@ -14,8 +16,12 @@ const TrailersWithOptions = () => {
       const { status, data } = response.data;
       if (status) {
         setTrailers(data);
-        // Fetch options for each trailer after trailers are fetched
-        data.forEach(trailer => fetchOptionsForTrailer(trailer._id));
+        const trailersWithOptions = {};
+        data.forEach(trailer => {
+          trailersWithOptions[trailer._id] = trailer.Price;
+          fetchOptionsForTrailer(trailer._id);
+        });
+        setTrailerPrices(trailersWithOptions);
       } else {
         setTrailers([]);
       }
@@ -42,6 +48,28 @@ const TrailersWithOptions = () => {
     }
   };
 
+  const handleOptionChange = (trailerId, optionId, price, isChecked) => {
+    setSelectedOptions(prev => ({
+      ...prev,
+      [trailerId]: {
+        ...(prev[trailerId] || {}),
+        [optionId]: isChecked
+      }
+    }));
+
+    setTrailerPrices(prev => {
+      const currentPrice = prev[trailerId];
+      const newPrice = isChecked
+        ? currentPrice + price
+        : currentPrice - price;
+
+      return {
+        ...prev,
+        [trailerId]: Math.round(newPrice) // Округление до целого числа
+      };
+    });
+  };
+
   useEffect(() => {
     fetchTrailers();
   }, []);
@@ -53,7 +81,7 @@ const TrailersWithOptions = () => {
           <Col span={8} key={trailer._id} style={{ marginBottom: "16px" }}>
             <Card
               title={trailer.Name}
-              extra={<span>{trailer.Price} руб.</span>}
+              extra={<span>{trailerPrices[trailer._id]} руб.</span>}
               bordered={false}
               hoverable
             >
@@ -70,8 +98,13 @@ const TrailersWithOptions = () => {
                   <ul>
                     {options[trailer._id].length > 0 ? (
                       options[trailer._id].map(option => (
-                        <li key={option.id}>
-                          <strong>{option.name}:</strong> {option.description}
+                        <li key={option.id} style={{ marginBottom: '8px' }}>
+                          <Checkbox
+                            onChange={(e) => handleOptionChange(trailer._id, option.id, option.price, e.target.checked)}
+                          >
+                            <strong>{option.name}:</strong> {option.description} {option.price} руб.
+                          </Checkbox>
+                          {option.image && <img src={`${option.image}`} alt={option.name} style={{ width: '100px', height: '100px', marginLeft: '10px' }} />}
                         </li>
                       ))
                     ) : (

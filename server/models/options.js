@@ -27,7 +27,16 @@ module.exports = (sequelize, DataTypes) => {
     description: {
       type: DataTypes.TEXT,
       allowNull: true,
-    }
+    },
+    price: {
+    type: DataTypes.FLOAT, // Или DataTypes.DECIMAL, в зависимости от требований
+    allowNull: false,
+    defaultValue: 0
+  },
+  image: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   }, {
     sequelize,
     modelName: 'Option',
