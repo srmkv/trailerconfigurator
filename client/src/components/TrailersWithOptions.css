@@ -1,0 +1,18 @@
+.image-container {
+  position: relative;
+  width: 100%; /* Используйте ширину контейнера для соответствия изображениям */
+  height: auto; /* Высота авто, чтобы сохранить пропорции */
+}
+
+.front-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.option-image {
+  position: absolute;
+   width: 100%; /* Используйте ширину контейнера для соответствия изображениям */
+  height: auto; /* Высота авто, чтобы сохранить пропорции */
+ 
+}

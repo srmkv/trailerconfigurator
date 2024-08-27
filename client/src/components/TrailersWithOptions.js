@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Card, Col, Row, Checkbox, message as AntMessage } from 'antd';
+import './TrailersWithOptions.css'; // Подключаем CSS для позиционирования
 
 const baseURL = "http://95.79.52.15:26336/";
 
@@ -85,12 +86,22 @@ const TrailersWithOptions = () => {
               bordered={false}
               hoverable
             >
-              <div>
-                <p><strong>Description:</strong> {trailer.Description}</p>
-                <p><strong>Front Image:</strong></p>
-                {trailer.FrontImg && <img src={trailer.FrontImg} alt="Front" style={{ width: '100px', height: '100px' }} />}
-                <p><strong>Back Image:</strong></p>
-                {trailer.BackImg && <img src={trailer.BackImg} alt="Back" style={{ width: '100px', height: '100px' }} />}
+              <div className="image-container">
+                <img src={trailer.FrontImg} alt="Front" className="front-image" />
+                {options[trailer._id]?.map(option => (
+                  selectedOptions[trailer._id]?.[option.id] && (
+                    <img 
+                      key={option.id}
+                      src={`${option.image}`} 
+                      alt={option.name} 
+                      className="option-image"
+                      style={{
+                        left: option.xPosition || 0, // координаты X, по умолчанию 0
+                        top: option.yPosition || 0,  // координаты Y, по умолчанию 0
+                      }}
+                    />
+                  )
+                ))}
               </div>
               <div>
                 <h3>Options:</h3>
@@ -104,7 +115,6 @@ const TrailersWithOptions = () => {
                           >
                             <strong>{option.name}:</strong> {option.description} {option.price} руб.
                           </Checkbox>
-                          {option.image && <img src={`${option.image}`} alt={option.name} style={{ width: '100px', height: '100px', marginLeft: '10px' }} />}
                         </li>
                       ))
                     ) : (
