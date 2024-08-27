@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     price: {
-    type: DataTypes.FLOAT, // Или DataTypes.DECIMAL, в зависимости от требований
+    type: DataTypes.STRING, // Или DataTypes.DECIMAL, в зависимости от требований
     allowNull: false,
     defaultValue: 0
   },
