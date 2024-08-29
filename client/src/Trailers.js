@@ -222,28 +222,31 @@ function Trailers() {
     });
   };
 
-  const handleClickOptionDelete = async (optionId) => {
+const handleClickOptionDelete = async (optionId) => {
     Modal.confirm({
-      title: "Confirm",
-      content: "Are you sure you want to delete this option?",
-      okText: "Delete",
-      onOk: async () => {
-        try {
-          const response = await axios.post(`${baseURL}${deleteOptionAPIName}`, { id: optionId, trailerId: selectedTrailerId });
-          const { status, message } = response.data;
-          if (status) {
-            AntMessage.success(message);
-            getOptionsForTrailer(selectedTrailerId);
-          } else {
-            AntMessage.error(message);
-          }
-        } catch (error) {
-          console.error('Error deleting option:', error);
-          AntMessage.error('Something went wrong.');
+        title: "Confirm",
+        content: "Are you sure you want to delete this option?",
+        okText: "Delete",
+        onOk: async () => {
+            try {
+                // Отправляем DELETE запрос с id в URL, а не в теле запроса
+                const response = await axios.delete(`${baseURL}${deleteOptionAPIName}/${optionId}`);
+                const { status, message } = response.data;
+                
+                if (status) {
+                    AntMessage.success(message);
+                    getOptionsForTrailer(selectedTrailerId);
+                } else {
+                    AntMessage.error(message);
+                }
+            } catch (error) {
+                console.error('Error deleting option:', error);
+                AntMessage.error('Something went wrong.');
+            }
         }
-      }
     });
-  };
+};
+
 
   const renderImagePreview = (file) => {
     if (file instanceof Blob) {

@@ -148,4 +148,69 @@ optionRoute.post('/api/options/addToTrailer', async (req, res) => {
     }
 });
 
+// Редактирование опции
+optionRoute.put('/api/options/edit/:id', upload.single('image'), async (req, res) => {
+    const { id } = req.params;
+    const { name, description, price, trailerId } = req.body;
+
+    try {
+        const option = await Option.findByPk(id);
+        if (!option) {
+            return res.status(404).json({ status: false, message: 'Option not found' });
+        }
+
+        // Обновление пути к изображению, если загружено новое
+        let image = option.image;
+        if (req.file) {
+            const trailer = await Trailer.findByPk(trailerId);
+            if (trailer) {
+                const trailerName = trailer.Name;
+                image = `uploads/${trailerName}/options/${req.file.filename}`;
+            } else {
+                return res.status(404).json({ status: false, message: 'Trailer not found' });
+            }
+        }
+
+        // Обновляем опцию
+        await option.update({ name, description, price, image });
+
+        res.json({ status: true, message: 'Option updated successfully' });
+    } catch (error) {
+        console.error('Error editing option:', error);
+        res.status(500).json({ status: false, message: 'Something went wrong' });
+    }
+});
+
+
+// Удаление опции
+optionRoute.delete('/api/options/delete/:id', async (req, res) => {
+    const { id } = req.params;
+    const { trailerId } = req.query;  // Дополнительный параметр, если нужен
+    try {
+        const option = await Option.findByPk(id);
+        if (!option) {
+            return res.status(404).json({ status: false, message: 'Option not found' });
+        }
+
+        // Удаление изображения, если существует
+        if (option.image) {
+            const imagePath = path.join(__dirname, '../../client/public', option.image);
+            await fs.unlink(imagePath).catch(err => {
+                console.error(`Error deleting image file: ${imagePath}`, err);
+            });
+        }
+
+        // Удаление опции и связей с трейлером, если нужно
+        await TrailerOption.destroy({ where: { optionId: id } });
+        await option.destroy();
+
+        res.json({ status: true, message: 'Option deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting option:', error);
+        res.status(500).json({ status: false, message: 'Something went wrong' });
+    }
+});
+
+
+
 module.exports = optionRoute;
