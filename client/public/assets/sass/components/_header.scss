@@ -1,0 +1,546 @@
+// Start Header 1 Area
+.header-area-1 {
+  position: relative;
+  border-bottom: 1px solid;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  border-image: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.2) 49.59%,
+      rgba(255, 255, 255, 0.2) 100%
+    )
+    1;
+  &.header-area-2 {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-bottom: none;
+    box-shadow: 61px 11px 278px 73px #0d6efd00;
+
+    &::before,
+    &::after,
+    .extra-box-border {
+      display: none;
+    }
+    .header-wrapper {
+      .get-in-touch {
+        width: 19%;
+        @media (max-width: 1465px) {
+          width: 22%;
+        }
+        @media (max-width: 1060px) {
+          width: 36%;
+        }
+        a {
+          transition-timing-function: linear;
+          transition-duration: 0.3s;
+          &:hover {
+            color: $text-color4;
+          }
+          &.header-search-bar {
+            &:hover {
+              span {
+                svg {
+                  transition-timing-function: linear;
+                  transition-duration: 0.3s;
+                  path {
+                    fill: $text-color4;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      .main-menu {
+        width: 74%;
+        @media (max-width: 1465px) {
+          width: 65%;
+        }
+        ul {
+          li {
+            a {
+              transition-timing-function: linear;
+              transition-duration: 0.3s;
+              &:hover {
+                color: $text-color4;
+                span {
+                  svg {
+                    path {
+                      fill: $text-color4;
+                    }
+                  }
+                }
+              }
+            }
+            .submenu {
+              li {
+                a {
+                  transition-timing-function: linear;
+                  transition-duration: 0.3s;
+                  &:hover {
+                    color: $text-color4;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      .logo {
+        @media (max-width: 1060px) {
+          width: 65%;
+        }
+      }
+      .menu-bar {
+        @media (max-width: 1060px) {
+          width: 17%;
+        }
+        a {
+          svg {
+            transition-timing-function: linear;
+            transition-duration: 0.3s;
+            line {
+              fill: $text-color1;
+            }
+          }
+          &:hover {
+            svg {
+              transition-timing-function: linear;
+              transition-duration: 0.3s;
+              line {
+                stroke: $text-color4;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &.header-area-3 {
+    .header-wrapper {
+      .get-in-touch {
+        a {
+          transition-timing-function: linear;
+          transition-duration: 0.3s;
+          &:hover {
+            color: $text-color6;
+          }
+          &.header-search-bar {
+            &:hover {
+              span {
+                svg {
+                  transition-timing-function: linear;
+                  transition-duration: 0.3s;
+                  path {
+                    fill: $text-color6;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      .main-menu {
+        ul {
+          li {
+            a {
+              transition-timing-function: linear;
+              transition-duration: 0.3s;
+              &:hover {
+                color: $text-color6;
+                span {
+                  svg {
+                    path {
+                      fill: $text-color6;
+                    }
+                  }
+                }
+              }
+            }
+            .submenu {
+              li {
+                a {
+                  transition-timing-function: linear;
+                  transition-duration: 0.3s;
+                  &:hover {
+                    color: $text-color6;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      .logo {
+        @media (max-width: 1060px) {
+          width: 65%;
+        }
+      }
+      .menu-bar {
+        @media (max-width: 1060px) {
+          width: 17%;
+        }
+        a {
+          svg {
+            transition-timing-function: linear;
+            transition-duration: 0.3s;
+            line {
+              fill: $text-color1;
+            }
+          }
+          &:hover {
+            svg {
+              transition-timing-function: linear;
+              transition-duration: 0.3s;
+              line {
+                stroke: $text-color4;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .extra-box-border {
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.2) 49.59%,
+      rgba(255, 255, 255, 0.2) 100%
+    );
+    right: 21.5%;
+    top: 0;
+    position: absolute;
+    @media (max-width: 1499px) {
+      right: 22.5%;
+    }
+    @media (max-width: 1199px) {
+      display: none;
+    }
+  }
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 1px;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.2) 49.59%,
+      rgba(255, 255, 255, 0.2) 100%
+    );
+    left: 16.2%;
+    @media (max-width: 992px) {
+      left: 30.5%;
+    }
+    @media (max-width: 767px) {
+      display: none;
+    }
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 1px;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.2) 49.59%,
+      rgba(255, 255, 255, 0.2) 100%
+    );
+    right: 27.5%;
+    @media (max-width: 1499px) {
+      right: 16.5%;
+    }
+    @media (max-width: 1199px) {
+      right: 22.5%;
+    }
+    @media (max-width: 992px) {
+      right: 30.5%;
+    }
+    @media (max-width: 767px) {
+      display: none;
+    }
+  }
+  .header-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+    @media (max-width: 767px) {
+      justify-content: space-between;
+      align-items: center;
+    }
+    .menu-bar {
+      display: none;
+      @media (max-width: 1199px) {
+        display: block;
+        width: 30%;
+        padding-left: 40px;
+        a {
+          svg {
+            transition-timing-function: linear;
+            transition-duration: 0.3s;
+            line {
+              fill: $text-color1;
+            }
+          }
+          &:hover {
+            svg {
+              transition-timing-function: linear;
+              transition-duration: 0.3s;
+              line {
+                stroke: $text-color2;
+              }
+            }
+          }
+        }
+      }
+      @media (max-width: 767px) {
+        width: 50%;
+      }
+    }
+    .logo {
+      width: 15%;
+      @media (max-width: 1199px) {
+        width: 60%;
+      }
+      @media (max-width: 767px) {
+        width: 50%;
+        padding-right: 40px;
+      }
+      a {
+        img {
+          @media (max-width: 1199px) {
+            margin: auto;
+          }
+        }
+      }
+    }
+    .main-menu {
+      width: 65%;
+      text-align: center;
+      position: relative;
+      @media (max-width: 1499px) {
+        width: 65%;
+      }
+      @media (max-width: 1199px) {
+        display: none;
+      }
+      ul {
+        li {
+          display: inline-block;
+          margin: 0 30px;
+          align-items: center;
+          position: relative;
+
+          &:hover {
+            .submenu {
+              top: 160%;
+              visibility: visible;
+              opacity: 1;
+              transform: perspective(300px) rotateX(0deg);
+            }
+          }
+          .submenu {
+            padding: 15px 0;
+            position: absolute;
+            top: 190%;
+            left: 0;
+            min-width: 200px;
+            background: $bg-color1;
+            z-index: 99999;
+            transition: all 0.3s ease-out 0s;
+            visibility: hidden;
+            opacity: 0;
+            box-shadow: 0px 20px 30px rgba(3, 6, 31, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            transform-origin: top;
+            transform: perspective(300px) rotateX(-18deg);
+            li {
+              display: block;
+              width: 100%;
+              margin: 0;
+              padding: 5px 20px;
+              text-align: left;
+              a {
+                color: $text-color1;
+                transition-timing-function: linear;
+                transition-duration: 0.3s;
+                &:hover {
+                  color: $text-color2;
+                }
+              }
+            }
+          }
+          @media (max-width: 1370px) {
+            margin: 0 25px;
+          }
+          @media (max-width: 1299px) {
+            margin: 0 16px;
+          }
+          a {
+            position: relative;
+            &:hover {
+              color: $text-color2;
+              span {
+                svg {
+                  path {
+                    fill: $text-color2;
+                  }
+                }
+              }
+            }
+            span {
+              margin-left: 5px;
+              svg {
+                transition-timing-function: linear;
+                transition-duration: 0.3s;
+              }
+            }
+          }
+        }
+      }
+    }
+    .get-in-touch {
+      display: flex;
+      align-items: center;
+      gap: 70px;
+      width: 27%;
+      @media (max-width: 1499px) {
+        width: 20%;
+        gap: 40px;
+      }
+      @media (max-width: 1199px) {
+        width: 30%;
+        justify-content: end;
+        gap: 60px;
+        padding-right: 40px;
+      }
+      @media (max-width: 810px) {
+        justify-content: center;
+        padding-right: 10px;
+      }
+      @media (max-width: 767px) {
+        display: none;
+      }
+      a {
+        transition-timing-function: linear;
+        transition-duration: 0.3s;
+        &:hover {
+          color: $text-color2;
+        }
+        &:first-child {
+          position: relative;
+          margin-left: -5px;
+          @media (max-width: 1199px) {
+            display: none;
+          }
+          &:hover {
+            span {
+              svg {
+                transition-timing-function: linear;
+                transition-duration: 0.3s;
+                path {
+                  fill: $text-color2;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+// End Header 1 Area
+
+// Start Header 2 Area
+.header-top {
+  position: relative;
+  padding-left: 88px;
+  padding-right: 80px;
+  padding-top: 11px;
+  padding-bottom: 11px;
+  background: $text-color2;
+  @media (max-width: 1050px) {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  .header-top-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    @media (max-width: 868px) {
+      justify-content: center;
+    }
+    .address {
+      display: flex;
+      align-items: center;
+      gap: 50px;
+      position: relative;
+      @media (max-width: 650px) {
+        display: block;
+        margin-bottom: 10px;
+        span {
+          display: block;
+          .address-meta {
+            display: inline-block;
+          }
+        }
+      }
+      &::before {
+        content: "";
+        width: 1px;
+        height: 85%;
+        background: $text-color5;
+        left: 71%;
+        rotate: 29deg;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        @media (max-width: 650px) {
+          display: none;
+        }
+      }
+      .address-meta {
+        font-weight: 500;
+      }
+    }
+    .header-top-menu {
+      @media (max-width: 868px) {
+        display: none;
+      }
+      ul {
+        li {
+          display: inline-block;
+          a {
+            color: $text-color5;
+            margin-right: 30px;
+            position: relative;
+            &::before {
+              content: "";
+              width: 1px;
+              height: 55%;
+              background: $text-color5;
+              right: -34%;
+              rotate: 29deg;
+              position: absolute;
+              top: 50%;
+              transform: translateY(-50%);
+            }
+          }
+          &:last-child {
+            a {
+              margin-right: 0px;
+              &::before {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+// End Header 2 Area

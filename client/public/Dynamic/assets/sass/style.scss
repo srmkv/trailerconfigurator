@@ -1,0 +1,36 @@
+
+
+/************************************** base css **************************************/
+@import 'base/variables';
+@import 'base/mixin';
+@import 'base/reset';
+@import 'base/typography';
+@import 'base/spacing';
+
+
+/******************************* theme css **********************************/
+@import 'theme/theme-class';
+@import 'theme/animations';
+
+
+/******************************** components ******************************/
+@import 'components/header';
+@import 'components/preloader';
+@import 'components/buttons';
+@import 'components/footer';
+@import 'components/breadcrumb';
+@import 'components/sidebar';
+@import 'components/mobile-menu';
+@import 'components/team-member';
+@import 'components/faq';
+
+/****************************** page styles ******************************/
+@import 'pages/index-1';
+@import 'pages/index-2';
+@import 'pages/index-3';
+@import 'pages/about-inner';
+@import 'pages/blog-details-inner';
+@import 'pages/theme-class-inner';
+@import 'pages/project-details';
+@import 'pages/team-details';
+@import 'pages/errro';

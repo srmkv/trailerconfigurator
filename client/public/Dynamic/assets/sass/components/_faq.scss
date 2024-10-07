@@ -1,0 +1,155 @@
+// Start Faq
+.accordion-container {
+  width: 80%;
+  max-width: 600px;
+  @media (max-width: 1200px) {
+    width: 95%;
+  }
+  @media (max-width: 991px) {
+    width: 100%;
+    margin: auto;
+  }
+}
+
+.accordion-item {
+  background-color: $text-color12;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.accordion-header {
+  background-color: $text-color12;
+  color: $text-color1;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+  padding: 20px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.3s ease;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 26px;
+  font-family: $heading-font;
+  &:hover {
+    color: $text-color4;
+  }
+}
+
+.accordion-content {
+  background-color: $text-color12;
+  overflow: hidden;
+  padding: 0 15px;
+  max-height: 0;
+  transition: max-height 0.3s ease;
+  @media (max-width: 480px) {
+    max-height: unset;
+    height: 125px;
+  }
+}
+
+.accordion-content p {
+  margin: 15px 0;
+  color: $text-color1;
+  font-family: $body-font;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 26px;
+  @media (max-width: 1386px) {
+    br {
+      display: none;
+    }
+  }
+}
+
+.icon {
+  transition: transform 0.3s ease;
+}
+.icon-1 {
+  transition: transform 0.3s ease;
+}
+.active .icon {
+  transform: rotate(45deg);
+}
+.active .icon-1 {
+  transform: rotate(92deg);
+}
+// End Faq
+
+// Start Faq Area
+.faq-area-1 {
+  padding-top: 130px;
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-left: 20px;
+  padding-left: 20px;
+  position: relative;
+  @media (max-width: 991) {
+    padding-top: 70px;
+  }
+  .faq-area-1-area-shep-1 {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .faq-area-wrapper-1 {
+    padding-bottom: 130px;
+    border-bottom: 1px solid $text-color2;
+  }
+  .faq-area-1-left {
+    .title {
+      text-align: left;
+      @media (max-width: 991px) {
+        text-align: center;
+      }
+      @media (max-width: 1385px) {
+        h3 {
+          br {
+            display: none;
+          }
+        }
+      }
+    }
+    p {
+      color: $text-color1;
+      font-family: $body-font;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 30px;
+      margin-top: 50px;
+    }
+    .faq-area-1-btn {
+      margin-top: 50px;
+    }
+  }
+  .faq-inner {
+    margin-top: 60px;
+  }
+  .accordion-header {
+    &:hover {
+      color: $text-color2;
+    }
+  }
+}
+.faq-area-2 {
+  position: relative;
+  .faq-area-2-shep-1 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+  .faq-area-2-shep-2 {
+    position: absolute;
+    top: 80px;
+    right: 0;
+  }
+  .accordion-header {
+    &:hover {
+      color: $text-color2;
+    }
+  }
+}
+// End Faq Area

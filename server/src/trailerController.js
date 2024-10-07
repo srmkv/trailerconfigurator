@@ -1,7 +1,9 @@
+'use strict';
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
+const slugify = require('slugify'); // Импортируем slugify
 const { Trailer } = require('../models');
 
 // Функция для создания директории, если она не существует
@@ -9,27 +11,49 @@ const createDir = (dir) => {
     try {
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
-            console.log(`Directory created: ${dir}`); // Логирование создания директории
+            console.log(`Directory created: ${dir}`);
         } else {
-            console.log(`Directory already exists: ${dir}`); // Логирование существующей директории
+            console.log(`Directory already exists: ${dir}`);
         }
     } catch (err) {
         console.error(`Error creating directory ${dir}:`, err);
     }
 };
 
+// Определение цветов
+const colors = [
+    { label: 'Белый', front: 'FrontImg', back: 'BackImg' },
+    { label: 'Зеленый', front: 'FrontImgGreen', back: 'BackImgGreen' },
+    { label: 'Изумрудный', front: 'FrontImgIzu', back: 'BackImgIzu' },
+    { label: 'Красный', front: 'FrontImgRed', back: 'BackImgRed' },
+    { label: 'Серый', front: 'FrontImgGray', back: 'BackImgGray' },
+    { label: 'Синий', front: 'FrontImgBlue', back: 'BackImgBlue' },
+    { label: 'Хакки', front: 'FrontImgHaki', back: 'BackImgHaki' },
+    { label: 'Черный', front: 'FrontImgBlack', back: 'BackImgBlack' },
+];
+
 // Настройка хранения файлов с помощью multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const name = req.body.Name || 'default'; // Используйте значение по умолчанию, если `Name` не определен
-        let dir = path.join(__dirname, '../../client/public/uploads', name);
+        const name = req.body.Name || 'default';
+        let colorFolder = 'default-color';
+        colors.forEach(color => {
+            if (file.fieldname === color.front || file.fieldname === color.back) {
+                colorFolder = color.label;
+            }
+        });
+        let dir = path.join(__dirname, '../../client/public/uploads', name, colorFolder);
 
         // Создайте директорию, если она не существует
         createDir(dir);
         cb(null, dir);
     },
     filename: (req, file, cb) => {
-        cb(null, file.originalname);
+        // Переименовываем файл, используя slugify
+        const name = path.parse(file.originalname).name;
+        const ext = path.extname(file.originalname);
+        const safeName = slugify(name, { lower: true, strict: true });
+        cb(null, `${safeName}${ext}`);
     }
 });
 
@@ -49,10 +73,12 @@ trailerRoute.get('/api/trailer/getAll', async (req, res) => {
 });
 
 // Добавление или редактирование трейлера
-trailerRoute.post('/api/trailer/addEditTrailer', upload.fields([
-    { name: 'FrontImg', maxCount: 1 },
-    { name: 'BackImg', maxCount: 1 }
-]), async (req, res) => {
+trailerRoute.post('/api/trailer/addEditTrailer', upload.fields(
+    colors.flatMap(color => [
+        { name: color.front, maxCount: 1 },
+        { name: color.back, maxCount: 1 }
+    ])
+), async (req, res) => {
     console.log('Files:', req.files); // Для отладки
     console.log('Body:', req.body); // Для отладки
 
@@ -62,17 +88,38 @@ trailerRoute.post('/api/trailer/addEditTrailer', upload.fields([
         return res.status(400).send('Missing required fields');
     }
 
-    // Обработка изображений
-    const FrontImg = req.files['FrontImg'] ? `/uploads/${Name}/${req.files['FrontImg'][0].filename}` : null;
-    const BackImg = req.files['BackImg'] ? `/uploads/${Name}/${req.files['BackImg'][0].filename}` : null;
-    console.log('FrontImg:', FrontImg); // Для отладки
+    // Обработка изображений для каждого цвета
+    const imageFields = {};
+    colors.forEach(color => {
+        if (req.files[color.front]) {
+            imageFields[color.front] = `/uploads/${Name}/${color.label}/${req.files[color.front][0].filename}`;
+        }
+        // Если файл не загружен, не устанавливаем поле, чтобы сохранить существующее значение
+
+        if (req.files[color.back]) {
+            imageFields[color.back] = `/uploads/${Name}/${color.label}/${req.files[color.back][0].filename}`;
+        }
+        // Если файл не загружен, не устанавливаем поле, чтобы сохранить существующее значение
+    });
 
     try {
         if (actionType === 'edit') {
-            await Trailer.update({ Name, Price, Description, FrontImg, BackImg }, { where: { _id } });
+            // Если есть новые файлы, обновляем соответствующие поля
+            // Остальные поля остаются неизменными
+            await Trailer.update({
+                Name,
+                Price,
+                Description,
+                ...imageFields
+            }, { where: { _id } });
             res.send({ status: true, message: 'Trailer updated successfully' });
         } else {
-            const trailer = await Trailer.create({ Name, Price, Description, FrontImg, BackImg });
+            const trailer = await Trailer.create({
+                Name,
+                Price,
+                Description,
+                ...imageFields
+            });
             res.send({ status: true, message: 'Trailer added successfully', data: trailer });
         }
     } catch (e) {
@@ -91,16 +138,16 @@ trailerRoute.post('/api/trailer/deleteTrailer', async (req, res) => {
     try {
         const trailer = await Trailer.findByPk(_id);
         if (trailer) {
-            // Удаление файлов
-            const dir = path.join(__dirname, '../uploads', trailer.Name);
-            
-            // Проверяем, существует ли директория перед её удалением
-            if (fs.existsSync(dir)) {
-                fs.rmdirSync(dir, { recursive: true });
-                console.log(`Directory deleted: ${dir}`); // Логирование удаления директории
-            } else {
-                console.warn(`Directory ${dir} does not exist`);
-            }
+            // Удаление файлов для каждого цвета
+            colors.forEach(color => {
+                const dir = path.join(__dirname, '../../client/public/uploads', trailer.Name, color.label);
+                if (fs.existsSync(dir)) {
+                    fs.rmdirSync(dir, { recursive: true });
+                    console.log(`Directory deleted: ${dir}`);
+                } else {
+                    console.warn(`Directory ${dir} does not exist`);
+                }
+            });
 
             // Удаление из базы данных
             await Trailer.destroy({ where: { _id } });

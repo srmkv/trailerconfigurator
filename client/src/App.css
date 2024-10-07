@@ -36,3 +36,37 @@
     transform: rotate(360deg);
   }
 }
+.nav-buttons ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  gap: 10px; /* Расстояние между кнопками */
+}
+
+.nav-buttons li {
+  margin: 0;
+}
+
+.button-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #1890ff; /* Зеленый фон */
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button-link:hover {
+  background-color: #1762a7; /* Темнее зеленый при наведении */
+  color: white;
+  transform: translateY(-2px); /* Легкий подъем при наведении */
+}
+
+.button-link:active {
+  background-color: #144e83; /* Еще темнее при нажатии */
+  color: white;
+  transform: translateY(1px); /* Легкий спуск при нажатии */
+}

@@ -1,0 +1,712 @@
+// Start Hero Area 1
+.hero-area {
+  position: relative;
+  padding-top: 115px;
+  padding-right: 20px;
+  padding-left: 20px;
+  @media (max-width: 991px) {
+    padding-top: 70px;
+  }
+  .hero-title {
+    @media (max-width: 1199px) {
+      h2 {
+        font-size: 45px;
+      }
+    }
+    @media (max-width: 450px) {
+      h2 {
+        font-size: 35px;
+      }
+    }
+    @media (max-width: 580px) {
+      h2 {
+        br {
+          display: none;
+        }
+      }
+    }
+  }
+  .hero-sub-title {
+    @media (max-width: 991px) {
+      margin-top: 25px;
+    }
+    p {
+      font-weight: 400;
+      letter-spacing: 0.54px;
+      margin-bottom: 50px;
+    }
+    a {
+      font-weight: 500;
+      color: $text-color5;
+      position: relative;
+      padding-right: 80px;
+      span {
+        margin-left: 8px;
+        position: absolute;
+        top: 47%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+  .hero-img-banner {
+    padding-top: 105px;
+    .hero-banner-img-inner {
+      overflow: hidden;
+    }
+  }
+}
+// End Hero Area 1
+
+// Start Offer Area Home 1
+.offer-area-home-1 {
+  padding-top: 130px;
+  padding-bottom: 130px;
+  position: relative;
+  padding-right: 20px;
+  padding-left: 20px;
+  @media (max-width: 991px) {
+    padding-top: 70px;
+    padding-bottom: 70px;
+  }
+  .offer-area-1-shep-1 {
+    position: absolute;
+    top: 71%;
+    right: 0;
+    transform: translateY(-50%);
+  }
+  @media (max-width: 767px) {
+    padding-top: 100px;
+    padding-bottom: 100px;
+  }
+  .offer-wrapper {
+    padding-top: 63px;
+    @media (max-width: 767px) {
+      padding-top: 43px;
+    }
+    .offer-inner {
+      padding-left: 30px;
+      padding-right: 44px;
+      padding-top: 32px;
+      padding-bottom: 35px;
+      border-radius: 7px;
+      border: 1px solid $text-color2;
+      box-shadow: 0px 0px 45px 0px rgba(0, 0, 0, 0.15);
+      background-color: $bg-color1;
+      cursor: pointer;
+      @media (max-width: 991px) {
+        &:last-child {
+          margin-top: 20px;
+        }
+      }
+      img {
+        transition: 0.5s ease;
+      }
+      &:hover {
+        img {
+          margin-top: -15px;
+        }
+      }
+      p {
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        color: $text-color1;
+        font-family: $heading-font;
+        margin-bottom: 42px;
+        @media (max-width: 1099px) {
+          br {
+            display: none;
+          }
+        }
+      }
+      .offer-work {
+        margin-top: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        span {
+          font-style: normal;
+          font-weight: 300;
+          line-height: normal;
+          text-transform: capitalize;
+          color: $text-color1;
+        }
+        a {
+          i {
+            font-size: 60px;
+            color: $text-color2;
+            rotate: 340deg;
+          }
+        }
+      }
+    }
+  }
+}
+// End Offer Area Home 1
+
+// Start About Area Home 1
+.about-area-home-1 {
+  position: relative;
+  padding-left: 20px;
+  padding-right: 20px;
+  .about-image {
+    width: 145%;
+    @media (max-width: 991px) {
+      width: unset;
+    }
+  }
+  .about-area-home-1-inner {
+    p {
+      text-transform: uppercase;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 156.5%;
+      letter-spacing: 3.24px;
+      text-transform: uppercase;
+      color: $text-color2;
+      font-family: $body-font;
+      margin-bottom: 15px;
+    }
+    h3 {
+      font-style: normal;
+      font-weight: 800;
+      line-height: 110.5%;
+      color: $text-color1;
+      font-family: $heading-font;
+      padding-bottom: 30px;
+      border-bottom: 1px solid rgba(207, 207, 207, 0.4);
+      @media (max-width: 490px) {
+        font-size: 35px;
+        br {
+          display: none;
+        }
+      }
+    }
+    .about-us-details {
+      font-style: normal;
+      font-weight: 400;
+      line-height: 156.5%;
+      color: $text-color1;
+      text-transform: capitalize;
+      font-family: $body-font;
+      letter-spacing: unset;
+      margin-top: 30px;
+    }
+    .about-point-text {
+      display: flex;
+      gap: 18px;
+      position: relative;
+      margin-top: 52px;
+      @media (max-width: 575px) {
+        align-items: center;
+      }
+      @media (max-width: 450px) {
+        display: block;
+      }
+      &::after {
+        content: "";
+        position: absolute;
+        top: 32%;
+        height: 1px;
+        width: 100%;
+        background-color: rgba(207, 207, 207, 0.1);
+        @media (max-width: 575px) {
+          display: none;
+        }
+      }
+      .about-point-icon {
+        @media (max-width: 450px) {
+          margin-bottom: 15px;
+        }
+        span {
+          width: 85px;
+          height: 85px;
+          background-color: $text-color1;
+          display: block;
+          text-align: center;
+          line-height: 85px;
+          border-radius: 50%;
+        }
+      }
+      .about-point-info {
+        h5 {
+          font-style: normal;
+          font-weight: 600;
+          line-height: 110.5%;
+          color: $text-color1;
+          font-family: $heading-font;
+        }
+        p {
+          font-style: normal;
+          font-weight: 400;
+          line-height: 156.5%;
+          color: $text-color1;
+          font-family: $body-font;
+          margin-top: 30px;
+          letter-spacing: unset;
+          text-transform: capitalize;
+          @media (max-width: 575px) {
+            br {
+              display: none;
+            }
+            margin-top: 10px;
+          }
+        }
+      }
+    }
+  }
+}
+// End About Area Home 1
+
+// Start Counter Area Home 1
+.counter-area-home-1 {
+  position: relative;
+  padding-bottom: 75px;
+  padding-top: 130px;
+  padding-right: 20px;
+  padding-left: 20px;
+  @media (max-width: 991px) {
+    padding-top: 70px;
+  }
+  .counter-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    .counter-itme {
+      display: flex;
+      align-items: center;
+      gap: 35px;
+      .counter-number {
+        span {
+          font-size: 80px;
+          font-style: normal;
+          font-weight: 600;
+          line-height: 110.5%;
+          color: $text-color2;
+          font-family: $heading-font;
+        }
+      }
+      .counter-number-info {
+        span {
+          font-style: normal;
+          font-weight: 500;
+          line-height: 156.5%;
+          letter-spacing: 2.025px;
+          text-transform: uppercase;
+          color: $text-color1;
+          font-family: $body-font;
+        }
+      }
+    }
+  }
+}
+// End Counter Area Home 1
+
+// Start Ppc Agencey Home 1
+.ppc-agencey-home-1 {
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-top: 130px;
+  padding-bottom: 130px;
+  position: relative;
+  .ppc-agencey-area-1-shep-1 {
+    position: absolute;
+    bottom: 190px;
+    left: 0;
+  }
+  .title {
+    text-align: left;
+    @media (max-width: 1035px) {
+      h3 {
+        br {
+          display: none;
+        }
+      }
+    }
+  }
+  p {
+    color: $text-color1;
+    font-family: $body-font;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-top: 33px;
+    @media (max-width: 575px) {
+      br {
+        display: none;
+      }
+    }
+  }
+  @media (max-width: 991px) {
+    .ppc-agencey-text {
+      margin-bottom: 70px;
+    }
+  }
+  .ppc-agencey-item {
+    &.ppc-agencey-item-2 {
+      margin-top: 65px;
+    }
+    .ppc-agencey-img {
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      @media (max-width: 575px) {
+        img {
+          width: 100%;
+        }
+      }
+      &.ppc-agencey-img-1,
+      &.ppc-agencey-img-3 {
+        margin-bottom: 23px;
+      }
+      h5 {
+        color: $text-color1;
+        font-family: $heading-font;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        transition-timing-function: linear;
+        transition-duration: 0.3s;
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        text-align: center;
+        transform: translateY(-50%);
+      }
+      &:hover {
+        h5 {
+          color: $text-color2;
+        }
+      }
+    }
+  }
+}
+// End Ppc Agencey Home 1
+
+// Start Digital Marketing Home 1
+.digital-marketing-home-1 {
+  padding-top: 130px;
+  padding-bottom: 130px;
+  padding-right: 20px;
+  padding-left: 20px;
+  position: relative;
+  &.digital-marketing-about-page {
+    .about-page-digital-marketing-area-shep-1 {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+    .digital-marketing-wrapper {
+      .digital-marketing-inner {
+        background-color: transparent;
+        &:hover {
+          background-color: $text-color12;
+        }
+      }
+    }
+  }
+  @media (max-width: 991px) {
+    padding-top: 70px;
+    padding-bottom: 70px;
+  }
+  .digital-marketing-wrapper {
+    margin-top: 70px;
+    .digital-marketing-inner {
+      border: 1px solid rgba(204, 255, 0, 0.4);
+      background-color: $text-color12;
+      padding: 50px 40px;
+      transition: 0.5s ease;
+      cursor: pointer;
+      img {
+        transition: 0.5s ease;
+        rotate: 0deg;
+      }
+      @media (max-width: 1250px) {
+        padding: 50px 20px;
+      }
+      &:hover {
+        background-color: transparent;
+        border: none;
+        img {
+          rotate: 360deg;
+        }
+        .digital-marketing-btn {
+          a {
+            span {
+              svg {
+                width: 100%;
+              }
+            }
+          }
+        }
+      }
+      h5 {
+        color: $text-color1;
+        font-family: $heading-font;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        text-transform: capitalize;
+        margin-top: 25px;
+      }
+      p {
+        color: $text-color1;
+        font-family: $body-font;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        text-transform: capitalize;
+        margin-top: 18px;
+        @media (max-width: 1250px) {
+          br {
+            display: none;
+          }
+        }
+      }
+      .digital-marketing-btn {
+        margin-top: 38px;
+        a {
+          display: flex;
+          align-items: center;
+          gap: 29px;
+          span {
+            color: $text-color2;
+            font-family: $body-font;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            text-transform: capitalize;
+            svg {
+              width: 0;
+              transition: 0.5s ease;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+// End Digital Marketing Home 1
+
+// Start Active Brand Area Home 3
+.active-brand-home-1 {
+  padding-top: 130px;
+  padding-bottom: 130px;
+  padding-right: 20px;
+  padding-left: 20px;
+  position: relative;
+  .active-brand-area-1-shep-1 {
+    position: absolute;
+    right: 0;
+    top: 18%;
+  }
+  @media (max-width: 991px) {
+    padding-top: 70px;
+    padding-bottom: 70px;
+  }
+  .brand-active-wrapper {
+    margin-top: 70px;
+    .brand-active-inner {
+      padding: 30px 20px;
+      border: 1px solid rgba(204, 255, 0, 0.4);
+      &.brand-active-item-2,
+      &.brand-active-item-4 {
+        margin-top: 39px;
+      }
+      &.brand-active-item-3 {
+        @media (max-width: 767px) {
+          margin-top: 39px;
+        }
+      }
+      span {
+        display: block;
+        color: $text-color1;
+        font-family: $body-font;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        display: block;
+        margin-bottom: 108px;
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+      a {
+        display: block;
+        margin-bottom: 92px;
+      }
+    }
+  }
+}
+// End Active Brand Area Home 3
+
+// Start Blog Area Home 1
+.blog-area-home-1 {
+  position: relative;
+  padding-top: 130px;
+  padding-bottom: 130px;
+  padding-right: 20px;
+  padding-left: 20px;
+  .blog-area-shep-1-home-1 {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .blog-area-shep-2-home-1 {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+  @media (max-width: 991px) {
+    padding-top: 70px;
+    padding-bottom: 70px;
+  }
+  .blog-wrapper {
+    margin-top: 70px;
+    h5 {
+      a {
+        color: $text-color1;
+        font-family: $heading-font;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        margin-top: 12px;
+        margin-bottom: 12px;
+        display: block;
+        transition-timing-function: linear;
+        transition-duration: 0.3s;
+        @media (max-width: 1100px) {
+          font-size: 20px;
+        }
+        &:hover {
+          color: $text-color2;
+        }
+      }
+    }
+    .blog-meta {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      @media (max-width: 400px) {
+        flex-wrap: wrap;
+      }
+      span {
+        color: #b0b0b0;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        font-family: $body-font;
+      }
+      .blog-category {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .blog-date {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+    }
+    .blog-read-more {
+      a {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        span {
+          color: $text-color2;
+          font-family: $body-font;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+        }
+        span {
+          svg {
+            opacity: 0;
+            transition: 0.5s ease;
+          }
+        }
+        &:hover {
+          span {
+            svg {
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+    .blog-inner {
+      position: relative;
+      &.blog-inner-2,
+      &.blog-inner-3,
+      &.blog-inner-4 {
+        display: block;
+        margin-bottom: 35px;
+        @media (max-width: 700px) {
+          margin-top: 60px;
+        }
+        .blog-info {
+          padding-top: 20px;
+          padding-bottom: 20px;
+          position: absolute;
+          left: 65%;
+          width: 70%;
+          top: 62%;
+          @media (max-width: 1165px) {
+            padding-left: 20px;
+            padding-right: 20px;
+          }
+          @media (max-width: 991px) {
+            left: 58%;
+            width: 80%;
+            top: 71%;
+          }
+          @media (max-width: 700px) {
+            position: relative;
+            margin-top: -159px;
+            left: unset;
+            top: unset;
+          }
+        }
+        &.blog-inner-4 {
+          margin-bottom: 0;
+        }
+        &.blog-inner-2 {
+          @media (max-width: 991px) {
+            margin-top: 100px;
+          }
+        }
+      }
+      .blog-info {
+        padding-top: 40px;
+        padding-left: 38px;
+        padding-right: 38px;
+        padding-bottom: 33px;
+        background-color: $text-color12;
+        border-radius: 5px;
+        width: 90%;
+        margin-right: auto;
+        margin-left: auto;
+        margin-top: -110px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        @media (max-width: 700px) {
+          position: relative;
+          z-index: 1;
+          left: unset;
+          transform: unset;
+        }
+        @media (max-width: 1336px) {
+          h5 {
+            br {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+// End Blog Area Home 1

@@ -31,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    //белый
     FrontImg: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -39,6 +40,70 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    //зеленый
+    FrontImgGreen: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    BackImgGreen: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    //изумрудный
+    FrontImgIzu: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    BackImgIzu: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    //красный
+    FrontImgRed: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    BackImgRed: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    //серый
+    FrontImgGray: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    BackImgGray: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    //синий
+    FrontImgBlue: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    BackImgBlue: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    //хакки
+    FrontImgHaki: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    BackImgHaki: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    //черный
+    FrontImgBlack: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    BackImgBlack: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
     
   }, {
     sequelize,

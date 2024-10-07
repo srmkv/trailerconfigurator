@@ -81,7 +81,7 @@ optionRoute.get('/api/options/getAll', async (req, res) => {
 });
 
 // Добавление новой опции и связывание её с трейлером
-optionRoute.post('/api/options/addOption', upload.single('image'), async (req, res) => {
+optionRoute.post('/api/options/addOption',  upload.fields([{ name: 'image' }, { name: 'Backimage' }]), async (req, res) => {
     try {
         let { name, description, price, trailerId, trailerName } = req.body;
 
@@ -100,14 +100,15 @@ optionRoute.post('/api/options/addOption', upload.single('image'), async (req, r
         }
 
         // Формируем путь к изображению
-        const image = req.file ? `uploads/${trailerName}/options/${req.file.filename}` : null;
+        const image = req.files['image'] ? `uploads/${trailerName}/options/${req.files['image'][0].filename}` : null;
+        const Backimage = req.files['Backimage'] ? `uploads/${trailerName}/options/${req.files['Backimage'][0].filename}` : null;
 
         if (!name || !description || !trailerId || !price) {
             return res.status(400).json({ status: false, message: 'All fields are required' });
         }
 
         // Создание опции
-        const option = await Option.create({ name, description, price, image });
+        const option = await Option.create({ name, description, price, image, Backimage });
 
         // Связывание опции с трейлером
         await TrailerOption.create({
@@ -122,7 +123,6 @@ optionRoute.post('/api/options/addOption', upload.single('image'), async (req, r
         res.status(500).json({ status: false, message: 'Something went wrong' });
     }
 });
-
 
 // Привязка опции к трейлеру
 optionRoute.post('/api/options/addToTrailer', async (req, res) => {
@@ -149,9 +149,9 @@ optionRoute.post('/api/options/addToTrailer', async (req, res) => {
 });
 
 // Редактирование опции
-optionRoute.put('/api/options/edit/:id', upload.single('image'), async (req, res) => {
+optionRoute.put('/api/options/edit/:id',  upload.fields([{ name: 'image' }, { name: 'Backimage' }]), async (req, res) => {
     const { id } = req.params;
-    const { name, description, price, trailerId } = req.body;
+    const { name, description, price, trailerId, position } = req.body;
 
     try {
         const option = await Option.findByPk(id);
@@ -161,38 +161,65 @@ optionRoute.put('/api/options/edit/:id', upload.single('image'), async (req, res
 
         // Обновление пути к изображению, если загружено новое
         let image = option.image;
-        if (req.file) {
-            const trailer = await Trailer.findByPk(trailerId);
-            if (trailer) {
-                const trailerName = trailer.Name;
-                image = `uploads/${trailerName}/options/${req.file.filename}`;
-            } else {
-                return res.status(404).json({ status: false, message: 'Trailer not found' });
+        let Backimage = option.Backimage; // Объявляем переменную Backimage
+
+        if (req.files['image']) {
+            // Удаление старого изображения, если оно существует
+            if (image) {
+                const oldImagePath = path.join(__dirname, '../../client/public', image);
+                await fs.unlink(oldImagePath).catch(err => {
+                    console.error(`Error deleting old image file: ${oldImagePath}`, err);
+                });
             }
+            const trailer = trailerId ? await Trailer.findByPk(trailerId) : null;
+            const trailerName = trailer ? trailer.Name : 'unknown';
+            image = `uploads/${trailerName}/options/${req.files['image'][0].filename}`;
+        }
+
+        if (req.files['Backimage']) {
+            // Удаление старого обратного изображения, если оно существует
+            if (Backimage) {
+                const oldBackImagePath = path.join(__dirname, '../../client/public', Backimage);
+                await fs.unlink(oldBackImagePath).catch(err => {
+                    console.error(`Error deleting old back image file: ${oldBackImagePath}`, err);
+                });
+            }
+            const trailer = trailerId ? await Trailer.findByPk(trailerId) : null;
+            const trailerName = trailer ? trailer.Name : 'unknown';
+            Backimage = `uploads/${trailerName}/options/${req.files['Backimage'][0].filename}`;
         }
 
         // Обновляем опцию
-        await option.update({ name, description, price, image });
+        await option.update({ 
+            name: name || option.name, 
+            description: description || option.description, 
+            price: price || option.price, 
+            image: image || option.image,
+            Backimage: Backimage || option.Backimage,
+            position: position !== undefined ? parseInt(position, 10) : option.position // Обработка поля position
+        });
 
-        res.json({ status: true, message: 'Option updated successfully' });
+        res.json({ status: true, message: 'Option updated successfully', data: option });
     } catch (error) {
         console.error('Error editing option:', error);
         res.status(500).json({ status: false, message: 'Something went wrong' });
     }
 });
 
-
 // Удаление опции
 optionRoute.delete('/api/options/delete/:id', async (req, res) => {
     const { id } = req.params;
     const { trailerId } = req.query;  // Дополнительный параметр, если нужен
+
+    console.log(`Received DELETE /api/options/delete/${id} with trailerId=${trailerId}`);
+
     try {
         const option = await Option.findByPk(id);
         if (!option) {
             return res.status(404).json({ status: false, message: 'Option not found' });
         }
 
-        // Удаление изображения, если существует
+        // Удаление изображений, если существуют
         if (option.image) {
             const imagePath = path.join(__dirname, '../../client/public', option.image);
             await fs.unlink(imagePath).catch(err => {
@@ -200,9 +227,18 @@ optionRoute.delete('/api/options/delete/:id', async (req, res) => {
             });
         }
 
-        // Удаление опции и связей с трейлером, если нужно
+        if (option.Backimage) {
+            const backImagePath = path.join(__dirname, '../../client/public', option.Backimage);
+            await fs.unlink(backImagePath).catch(err => {
+                console.error(`Error deleting back image file: ${backImagePath}`, err);
+            });
+        }
+
+        // Удаление опции и связей с трейлером
         await TrailerOption.destroy({ where: { optionId: id } });
         await option.destroy();
+
+        console.log(`Option deleted:`, id);
 
         res.json({ status: true, message: 'Option deleted successfully' });
     } catch (error) {
@@ -210,7 +246,5 @@ optionRoute.delete('/api/options/delete/:id', async (req, res) => {
         res.status(500).json({ status: false, message: 'Something went wrong' });
     }
 });
-
-
 
 module.exports = optionRoute;

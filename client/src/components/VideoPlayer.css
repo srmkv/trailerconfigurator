@@ -1,0 +1,95 @@
+/* TrailersWithOptions.css */
+
+/* Общие стили */
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* Занимает всю высоту экрана */
+  overflow: hidden; /* Скрыть все, что выходит за границы */
+}
+
+#background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Обеспечивает покрытие всего контейнера */
+}
+
+.overlay-buttons {
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 20px; /* Расстояние между кнопками */
+  z-index: 1; /* Поместить кнопки поверх видео */
+}
+
+.overlay-button {
+  background-color: transparent; /* Прозрачный фон */
+  border: 3px solid #fff; /* Белый бордер */
+  color: #fff; /* Белый цвет текста */
+  padding: 15px 30px;
+  font-size: 1.8rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay-button:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* Легкое затемнение фона при наведении */
+  color: #fff; /* Цвет текста при наведении */
+}
+
+.calculator-button {
+  /* Специфические стили для кнопки "Калькулятор" (если необходимы) */
+}
+
+.company-button {
+  /* Специфические стили для кнопки "О компании" (если необходимы) */
+}
+
+/* Медиа-запросы для планшетов (макс. ширина 992px) */
+@media (max-width: 992px) {
+  .overlay-buttons {
+    top: 75%;
+    gap: 15px;
+  }
+
+  .overlay-button {
+    padding: 12px 25px;
+    font-size: 1.5rem;
+  }
+}
+
+/* Медиа-запросы для мобильных телефонов (макс. ширина 576px) */
+@media (max-width: 576px) {
+  .overlay-buttons {
+    top: 70%;
+    flex-direction: column;
+    gap: 10px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%; /* Установить ширину для кнопок */
+  }
+
+  .overlay-button {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    width: 100%; /* Кнопки занимают всю ширину контейнера */
+  }
+
+  .video-container {
+    height: 100vh; /* Можно оставить, но проверить на реальных устройствах */
+  }
+
+  #background-video {
+    /* На некоторых мобильных устройствах 100vh может быть слишком высоким из-за адресной строки */
+    height: 100%;
+  }
+}

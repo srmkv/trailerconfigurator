@@ -2,27 +2,49 @@ import React, { useEffect, useState } from "react";
 import { Table, Button, Modal, Input, Form, message as AntMessage } from "antd";
 import axios from 'axios';
 
-function Trailers() {
-  const baseURL = "http://95.79.52.15:26336/";
+const colors = [
+  { label: 'Белый', front: 'FrontImg', back: 'BackImg' },
+  { label: 'Зеленый', front: 'FrontImgGreen', back: 'BackImgGreen' },
+  { label: 'Изумрудный', front: 'FrontImgIzu', back: 'BackImgIzu' },
+  { label: 'Красный', front: 'FrontImgRed', back: 'BackImgRed' },
+  { label: 'Серый', front: 'FrontImgGray', back: 'BackImgGray' },
+  { label: 'Синий', front: 'FrontImgBlue', back: 'BackImgBlue' },
+  { label: 'Хакки', front: 'FrontImgHaki', back: 'BackImgHaki' },
+  { label: 'Черный', front: 'FrontImgBlack', back: 'BackImgBlack' },
+];
 
+function Trailers() {
+  // Базовый URL API
+  const baseURL = "http://192.168.0.149:5000/";
+  
+  // Названия API эндпоинтов
   const getListAPIName = "api/trailer/getAll";
   const addEditAPIName = "api/trailer/addEditTrailer";
   const deleteAPIName = "api/trailer/deleteTrailer";
-  const getOptionsAPIName = "api/options/getAll"; // Обновленный путь
+  const getOptionsAPIName = "api/options/getAll";
   const addOptionAPIName = "api/options/addOption";
-  const editOptionAPIName = "api/options/edit"; // Убедитесь, что этот путь используется в API
-  const deleteOptionAPIName = "api/options/delete"; // Обновленный путь
+  const editOptionAPIName = "api/options/edit";
+  const deleteOptionAPIName = "api/options/delete";
 
+  // Инициализация состояния для трейлеров
   const [rawTableData, setRawTableData] = useState([]);
-  const [addEditFormValues, setAddEditFormValues] = useState({
+
+  // Инициализация состояния для формы добавления/редактирования трейлера
+  const initialFormValues = {
     actionType: "add",
     _id: "",
     Name: "",
     Price: "",
     Description: "",
-    FrontImg: null,
-    BackImg: null
+  };
+
+  // Добавляем динамически поля для каждого цвета
+  colors.forEach(color => {
+    initialFormValues[color.front] = null;
+    initialFormValues[color.back] = null;
   });
+
+  const [addEditFormValues, setAddEditFormValues] = useState(initialFormValues);
   const [options, setOptions] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isOptionsModalVisible, setIsOptionsModalVisible] = useState(false);
@@ -32,13 +54,17 @@ function Trailers() {
     name: "", 
     description: "", 
     price: "", 
-    image: "" 
+    image: null,
+    Backimage: null,
+    position: 0  // Новое поле для порядка наложения
   });
 
+  // Получение списка трейлеров при монтировании компонента
   useEffect(() => {
     getMainList();
   }, []);
 
+  // Функция для получения списка трейлеров
   const getMainList = async () => {
     try {
       const response = await fetch(`${baseURL}${getListAPIName}`);
@@ -51,39 +77,48 @@ function Trailers() {
       }
     } catch (error) {
       console.error('Error fetching list:', error);
-      AntMessage.error('Error fetching list.');
+      AntMessage.error('Ошибка при получении списка трейлеров.');
     }
   };
 
+  // Функция для получения опций конкретного трейлера
   const getOptionsForTrailer = async (trailerId) => {
     try {
       const response = await axios.get(`${baseURL}${getOptionsAPIName}?trailerId=${trailerId}`);
-      console.log("Options response:", response.data); // Логирование для проверки
       const { status, data } = response.data;
       if (status) {
-        setOptions(data); // Загружаем только отфильтрованные опции
+        // Сортировка опций по полю position (по возрастанию)
+        const sortedOptions = data.sort((a, b) => a.position - b.position);
+        setOptions(sortedOptions);
       } else {
         setOptions([]);
       }
     } catch (error) {
       console.error('Error fetching options:', error);
-      AntMessage.error('Error fetching options.');
+      AntMessage.error('Ошибка при получении опций.');
     }
   };
 
+  // Обработка сохранения трейлера (добавление или редактирование)
   const handleOk = async () => {
     const formData = new FormData();
-    Object.keys(addEditFormValues).forEach((key) => {
-      if (key !== 'FrontImg' && key !== 'BackImg') {
-        formData.append(key, addEditFormValues[key]);
+    
+    // Добавляем основные поля
+    formData.append('actionType', addEditFormValues.actionType);
+    formData.append('_id', addEditFormValues._id);
+    formData.append('Name', addEditFormValues.Name);
+    formData.append('Price', addEditFormValues.Price);
+    formData.append('Description', addEditFormValues.Description);
+    
+    // Добавляем изображения для каждого цвета
+    colors.forEach(color => {
+      if (addEditFormValues[color.front]) {
+        formData.append(color.front, addEditFormValues[color.front]);
+      }
+      if (addEditFormValues[color.back]) {
+        formData.append(color.back, addEditFormValues[color.back]);
       }
     });
-    if (addEditFormValues.FrontImg) {
-      formData.append('FrontImg', addEditFormValues.FrontImg);
-    }
-    if (addEditFormValues.BackImg) {
-      formData.append('BackImg', addEditFormValues.BackImg);
-    }
 
     try {
       const response = await axios.post(`${baseURL}${addEditAPIName}`, formData, {
@@ -98,70 +133,76 @@ function Trailers() {
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      AntMessage.error('Something went wrong.');
+      AntMessage.error('Произошла ошибка при сохранении трейлера.');
     }
   };
 
+  // Обработка открытия модального окна опций для конкретного трейлера
   const handleClickOptions = (trailer) => {
     setSelectedTrailerId(trailer._id);
     getOptionsForTrailer(trailer._id);
     setIsOptionsModalVisible(true);
   };
 
- const handleOptionsOk = async () => {
-  const formData = new FormData();
-  formData.append('name', optionFormValues.name);
-  formData.append('description', optionFormValues.description);
-  formData.append('price', optionFormValues.price);
-  formData.append('trailerId', selectedTrailerId);
+  // Обработка сохранения опции (добавление или редактирование)
+  const handleOptionsOk = async () => {
+    const formData = new FormData();
+    formData.append('name', optionFormValues.name);
+    formData.append('description', optionFormValues.description);
+    formData.append('price', optionFormValues.price);
+    formData.append('trailerId', selectedTrailerId);
+    formData.append('position', optionFormValues.position);  // Добавлено поле order
 
-  if (optionFormValues.image) {
-    formData.append('image', optionFormValues.image);
-    console.log("Image file appended:", optionFormValues.image);
-  } else {
-    console.log("No image file selected.");
-  }
-
-  try {
-    let response;
-    if (optionFormValues.id) {
-      formData.append('id', optionFormValues.id);
-      response = await axios.post(`${baseURL}${editOptionAPIName}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-    } else {
-      response = await axios.post(`${baseURL}${addOptionAPIName}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+    if (optionFormValues.image) {
+      formData.append('image', optionFormValues.image);
     }
 
-    const { status, message } = response.data;
-    if (status) {
-      AntMessage.success(optionFormValues.id ? 'Option updated successfully' : 'Option added successfully');
-      handleOptionsCancel();
-      getOptionsForTrailer(selectedTrailerId);
-    } else {
-      AntMessage.error(message);
+    if (optionFormValues.Backimage) {
+      formData.append('Backimage', optionFormValues.Backimage);
     }
-  } catch (error) {
-    console.error('Error submitting option form:', error);
-    AntMessage.error('Something went wrong.');
-  }
-};
 
+    try {
+      let response;
+      if (optionFormValues.id) {
+        response = await axios.put(`${baseURL}${editOptionAPIName}/${optionFormValues.id}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+      } else {
+        response = await axios.post(`${baseURL}${addOptionAPIName}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+      }
 
+      const { status, message } = response.data;
+      if (status) {
+        AntMessage.success(optionFormValues.id ? 'Опция успешно обновлена' : 'Опция успешно добавлена');
+        handleOptionsCancel();
+        getOptionsForTrailer(selectedTrailerId);
+      } else {
+        AntMessage.error(message);
+      }
+    } catch (error) {
+      console.error('Error submitting option form:', error);
+      AntMessage.error('Произошла ошибка при сохранении опции.');
+    }
+  };
+
+  // Обработка закрытия модального окна опций
   const handleOptionsCancel = () => {
-    setOptionFormValues({ name: "", description: "", price: "", image: "" });
+    setOptionFormValues({ id: "", name: "", description: "", price: "", image: null, Backimage: null, position: 0 });
     setIsOptionsModalVisible(false);
   };
 
+  // Обработка изменения полей формы трейлера
   const handleInputChange = (e) => {
+    const { name, value } = e.target;
     setAddEditFormValues({
       ...addEditFormValues,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
+  // Обработка изменения файловых полей формы трейлера
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     if (files && files[0]) {
@@ -172,13 +213,15 @@ function Trailers() {
     }
   };
 
-  const handleOptionInputChange = (e) => {
+  // Обработка изменения полей формы опции
+  const handleOptionInputChange = (value, field) => {
     setOptionFormValues({
       ...optionFormValues,
-      [e.target.name]: e.target.value,
+      [field]: value,
     });
   };
 
+  // Обработка изменения файловых полей формы опции
   const handleOptionFileChange = (e) => {
     const { name, files } = e.target;
     if (files && files[0]) {
@@ -189,16 +232,21 @@ function Trailers() {
     }
   };
 
+  // Обработка открытия модального окна редактирования трейлера
   const handleClickEdit = (data) => {
-    setAddEditFormValues({ ...data, actionType: "edit" });
+    setAddEditFormValues({ 
+      ...data, 
+      actionType: "edit" 
+    });
     setIsModalVisible(true);
   };
 
+  // Обработка удаления трейлера
   const handleClickDelete = (data) => {
     Modal.confirm({
-      title: "Confirm",
-      content: "Are you sure you want to delete it?",
-      okText: "Delete",
+      title: "Подтверждение",
+      content: "Вы уверены, что хотите удалить этот трейлер?",
+      okText: "Удалить",
       onOk: async () => {
         try {
           const response = await fetch(`${baseURL}${deleteAPIName}`, {
@@ -216,212 +264,300 @@ function Trailers() {
           }
         } catch (error) {
           console.error('Error deleting trailer:', error);
-          AntMessage.error('Something went wrong.');
+          AntMessage.error('Произошла ошибка при удалении трейлера.');
         }
       },
     });
   };
 
-const handleClickOptionDelete = async (optionId) => {
+  // Обработка удаления опции
+  const handleClickOptionDelete = async (optionId) => {
     Modal.confirm({
-        title: "Confirm",
-        content: "Are you sure you want to delete this option?",
-        okText: "Delete",
-        onOk: async () => {
-            try {
-                // Отправляем DELETE запрос с id в URL, а не в теле запроса
-                const response = await axios.delete(`${baseURL}${deleteOptionAPIName}/${optionId}`);
-                const { status, message } = response.data;
-                
-                if (status) {
-                    AntMessage.success(message);
-                    getOptionsForTrailer(selectedTrailerId);
-                } else {
-                    AntMessage.error(message);
-                }
-            } catch (error) {
-                console.error('Error deleting option:', error);
-                AntMessage.error('Something went wrong.');
-            }
+      title: "Подтверждение",
+      content: "Вы уверены, что хотите удалить эту опцию?",
+      okText: "Удалить",
+      onOk: async () => {
+        try {
+          const response = await axios.delete(`${baseURL}${deleteOptionAPIName}/${optionId}`);
+          const { status, message } = response.data;
+
+          if (status) {
+            AntMessage.success(message);
+            getOptionsForTrailer(selectedTrailerId);
+          } else {
+            AntMessage.error(message);
+          }
+        } catch (error) {
+          console.error('Error deleting option:', error);
+          AntMessage.error('Произошла ошибка при удалении опции.');
         }
+      }
     });
-};
+  };
 
-
+  // Функция для предварительного просмотра изображения
   const renderImagePreview = (file) => {
     if (file instanceof Blob) {
       return URL.createObjectURL(file);
+    } else if (typeof file === 'string') {
+      return file.startsWith('/') ? `${file}` : file;
     }
     return null;
   };
 
+  // Колонки для таблицы трейлеров
   const columns = [
-    { title: "Name", dataIndex: "Name", key: "Name" },
-    { title: "Price", dataIndex: "Price", key: "Price" },
-    { title: "Description", dataIndex: "Description", key: "Description" },
+    { title: "Название", dataIndex: "Name", key: "Name" },
+    { title: "Цена", dataIndex: "Price", key: "Price" },
+    { title: "Описание", dataIndex: "Description", key: "Description" },
     {
-      title: "Action",
+      title: "Изображения",
+      key: "images",
+      render: (text, record) => (
+        <div>
+          {colors.map(color => (
+            <div key={color.label} style={{ marginBottom: '10px' ,display: 'flex'}}>
+              <strong>{color.label}:</strong><br/>
+              {record[color.front] && (
+                <img
+                  src={renderImagePreview(record[color.front])}
+                  alt={`${color.label} Front`}
+                  style={{ width: '50px', height: '50px', marginRight: '5px' }}
+                />
+              )}
+              {record[color.back] && (
+                <img
+                  src={renderImagePreview(record[color.back])}
+                  alt={`${color.label} Back`}
+                  style={{ width: '50px', height: '50px' }}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      )
+    },
+    {
+      title: "Действия",
       key: "action",
       render: (text, record) => (
         <>
-          <Button type="primary" onClick={() => handleClickEdit(record)}>Edit</Button>{" "}
-          <Button type="danger" onClick={() => handleClickDelete(record)}>Delete</Button>{" "}
-          <Button type="default" onClick={() => handleClickOptions(record)}>Options</Button>
+          <Button type="primary" onClick={() => handleClickEdit(record)}>Редактировать</Button>{" "}
+          <Button type="danger" onClick={() => handleClickDelete(record)}>Удалить</Button>{" "}
+          <Button type="default" onClick={() => handleClickOptions(record)}>Опции</Button>
         </>
       ),
     },
   ];
 
+  // Колонки для таблицы опций
   const optionsColumns = [
-
-    { title: "Option Name", dataIndex: "name", key: "name" },
-    { title: "Option Description", dataIndex: "description", key: "description" },
-    { title: "Option Price", dataIndex: "price", key: "price" },
-    {
-      title: "Option Image",
-      dataIndex: "image",
-      key: "image",
-      render: (image) => (
-        <img
-          src={image ? `${image}` : null}
-          alt="Option"
-          style={{ width: '100px', height: '100px' }}
-        />
+    { title: "Название опции", dataIndex: "name", key: "name" },
+    { title: "Описание опции", dataIndex: "description", key: "description" },
+    { title: "Цена опции", dataIndex: "price", key: "price" },
+    { 
+      title: "Порядок наложения", 
+      dataIndex: "position", 
+      key: "position",
+      sorter: (a, b) => a.position - b.position,
+      render: (position) => (
+        position > 0 ? `Поверх (Порядок: ${position})` :
+        position < 0 ? `Под (Порядок: ${position})` :
+        `Основное изображение (${position})`
       )
     },
     {
-      title: "Action",
+      title: "Изображение опции",
+      dataIndex: "image",
+      key: "image",
+      render: (image) => (
+        image ? (
+          <img
+            src={renderImagePreview(image)}
+            alt="Option"
+            style={{ width: '100px', height: '100px' }}
+          />
+        ) : null
+      )
+    },
+    {
+      title: "Обратное изображение опции",
+      dataIndex: "Backimage",
+      key: "Backimage",
+      render: (Backimage) => (
+        Backimage ? (
+          <img
+            src={renderImagePreview(Backimage)}
+            alt="Back Option"
+            style={{ width: '100px', height: '100px' }}
+          />
+        ) : null
+      )
+    },
+    {
+      title: "Действия",
       key: "action",
       render: (text, record) => (
         <>
           <Button type="primary" onClick={() => {
-            setOptionFormValues({ id: record.id, name: record.name, description: record.description, price: record.price, image: record.image });
+            setOptionFormValues({ 
+              id: record.id, 
+              name: record.name, 
+              description: record.description, 
+              price: record.price, 
+              image: record.image,
+              Backimage: record.Backimage,
+              position: record.position 
+            });
             setIsOptionsModalVisible(true);
-          }}>Edit</Button>{" "}
-          <Button type="danger" onClick={() => handleClickOptionDelete(record.id)}>Delete</Button>
+          }}>Редактировать</Button>{" "}
+          <Button type="danger" onClick={() => handleClickOptionDelete(record.id)}>Удалить</Button>
         </>
       ),
     },
   ];
 
+  // Обновление списка трейлеров после добавления/редактирования
   const onUpdateList = () => {
     setIsModalVisible(false);
+    setAddEditFormValues(initialFormValues);
     getMainList();
   };
 
   return (
     <div style={{ padding: "30px" }}>
+      {/* Кнопка для добавления нового трейлера */}
       <Button type="primary" style={{ margin: "30px" }} onClick={() => setIsModalVisible(true)}>
-        Add Trailer
+        Добавить трейлер
       </Button>
 
+      {/* Модальное окно для добавления/редактирования трейлера */}
       <Modal
-        title={addEditFormValues.actionType === "edit" ? "Edit Trailer" : "Add Trailer"}
+        title={addEditFormValues.actionType === "edit" ? "Редактировать трейлер" : "Добавить трейлер"}
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={() => {
-          setAddEditFormValues({
-            actionType: "add",
-            _id: "",
-            Name: "",
-            Price: "",
-            Description: "",
-            FrontImg: null,
-            BackImg: null
-          });
+          setAddEditFormValues(initialFormValues);
           setIsModalVisible(false);
         }}
+        okText={addEditFormValues.actionType === "edit" ? "Сохранить" : "Добавить"}
+        width={800}
       >
         <Form layout="vertical">
-          <Form.Item label="Name">
+          <Form.Item label="Название">
             <Input
-              placeholder="Name"
+              placeholder="Название"
               name="Name"
               value={addEditFormValues.Name}
               onChange={handleInputChange}
             />
           </Form.Item>
-          <Form.Item label="Price">
+          <Form.Item label="Цена">
             <Input
-              placeholder="Price"
+              placeholder="Цена"
               name="Price"
               value={addEditFormValues.Price}
               onChange={handleInputChange}
             />
           </Form.Item>
-          <Form.Item label="Description">
+          <Form.Item label="Описание">
             <Input
-              placeholder="Description"
+              placeholder="Описание"
               name="Description"
               value={addEditFormValues.Description}
               onChange={handleInputChange}
             />
           </Form.Item>
-          <Form.Item label="Front Image">
-            <input
-              type="file"
-              name="FrontImg"
-              accept="image/*"
-              onChange={handleFileChange}
-            />
-            {addEditFormValues.FrontImg && (
-              <img
-                src={renderImagePreview(addEditFormValues.FrontImg)}
-                alt="Front"
-                style={{ width: '100px', height: '100px', marginTop: '10px' }}
-              />
-            )}
-          </Form.Item>
-          <Form.Item label="Back Image">
-            <input
-              type="file"
-              name="BackImg"
-              accept="image/*"
-              onChange={handleFileChange}
-            />
-            {addEditFormValues.BackImg && (
-              <img
-                src={renderImagePreview(addEditFormValues.BackImg)}
-                alt="Back"
-                style={{ width: '100px', height: '100px', marginTop: '10px' }}
-              />
-            )}
-          </Form.Item>
+
+          {/* Генерация полей для каждого цвета */}
+          {colors.map(color => (
+            <div key={color.label} style={{ border: '1px solid #f0f0f0', padding: '10px', marginBottom: '15px' }}>
+              <h4>{color.label} цвет</h4>
+              <Form.Item label={`Переднее изображение (${color.label})`}>
+                <input
+                  type="file"
+                  name={color.front}
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+                {addEditFormValues[color.front] && (
+                  <img
+                    src={renderImagePreview(addEditFormValues[color.front])}
+                    alt={`${color.label} Front`}
+                    style={{ width: '100px', height: '100px', marginTop: '10px' }}
+                  />
+                )}
+              </Form.Item>
+              <Form.Item label={`Заднее изображение (${color.label})`}>
+                <input
+                  type="file"
+                  name={color.back}
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+                {addEditFormValues[color.back] && (
+                  <img
+                    src={renderImagePreview(addEditFormValues[color.back])}
+                    alt={`${color.label} Back`}
+                    style={{ width: '100px', height: '100px', marginTop: '10px' }}
+                  />
+                )}
+              </Form.Item>
+            </div>
+          ))}
+
         </Form>
       </Modal>
 
+      {/* Модальное окно для управления опциями трейлера */}
       <Modal
-        title="Manage Options"
+        title="Управление опциями"
         visible={isOptionsModalVisible}
         onCancel={handleOptionsCancel}
         footer={null}
+        width="70%"
       >
+        {/* Форма для добавления/редактирования опции */}
         <Form layout="vertical">
-          <Form.Item label="Option Name">
+          <Form.Item label="Название опции">
             <Input
-              placeholder="Option Name"
+              placeholder="Название опции"
               name="name"
               value={optionFormValues.name}
-              onChange={handleOptionInputChange}
+              onChange={(e) => handleOptionInputChange(e.target.value, 'name')}
             />
           </Form.Item>
-          <Form.Item label="Option Price">
+          <Form.Item label="Цена опции">
             <Input
-              placeholder="Option Price"
+              placeholder="Цена опции"
               name="price"
               value={optionFormValues.price}
-              onChange={handleOptionInputChange}
+              onChange={(e) => handleOptionInputChange(e.target.value, 'price')}
             />
           </Form.Item>
-          <Form.Item label="Option Description">
+          <Form.Item label="Описание опции">
             <Input
-              placeholder="Option Description"
+              placeholder="Описание опции"
               name="description"
               value={optionFormValues.description}
-              onChange={handleOptionInputChange}
+              onChange={(e) => handleOptionInputChange(e.target.value, 'description')}
             />
           </Form.Item>
-          <Form.Item label="Option Image">
+          <Form.Item label="Порядок наложения">
+            <Input
+              type="number"
+              placeholder="Введите числовой порядок (например, -2, -1, 1, 2)"
+              name="position"
+              value={optionFormValues.position}
+              onChange={(e) => handleOptionInputChange(parseInt(e.target.value, 10) || 0, 'position')}
+            />
+            <div style={{ marginTop: '5px', color: '#888' }}>
+              Значение меньше 0: под основным изображением<br/>
+              Значение больше 0: поверх основного изображения<br/>
+              Значение 0: основное изображение
+            </div>
+          </Form.Item>
+          <Form.Item label="Изображение опции">
             <input
               type="file"
               name="image"
@@ -436,23 +572,43 @@ const handleClickOptionDelete = async (optionId) => {
               />
             )}
           </Form.Item>
+          <Form.Item label="Заднее изображение опции">
+            <input
+              type="file"
+              name="Backimage"
+              accept="image/*"
+              onChange={handleOptionFileChange}
+            />
+            {optionFormValues.Backimage && (
+              <img
+                src={renderImagePreview(optionFormValues.Backimage)}
+                alt="Back Option"
+                style={{ width: '100px', height: '100px', marginTop: '10px' }}
+              />
+            )}
+          </Form.Item>
           <Form.Item>
             <Button type="primary" onClick={handleOptionsOk}>
-              {optionFormValues.id ? "Update Option" : "Add Option"}
+              {optionFormValues.id ? "Сохранить опцию" : "Добавить опцию"}
             </Button>
           </Form.Item>
         </Form>
+
+        {/* Таблица с опциями */}
         <Table
           rowKey={(record) => record.id}
           columns={optionsColumns}
           dataSource={options}
+          pagination={{ pageSize: 5 }}
         />
       </Modal>
 
+      {/* Таблица с трейлерами */}
       <Table
         rowKey={(record) => record._id}
         columns={columns}
         dataSource={rawTableData}
+        pagination={{ pageSize: 10 }}
       />
     </div>
   );

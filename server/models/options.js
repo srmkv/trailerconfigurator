@@ -1,4 +1,3 @@
-// server/models/option.js
 'use strict';
 const { Model } = require('sequelize');
 
@@ -8,11 +7,12 @@ module.exports = (sequelize, DataTypes) => {
       // Связь "многие ко многим" с моделью Trailer через таблицу TrailerOptions
       this.belongsToMany(models.Trailer, {
         through: 'TrailerOptions',
-        foreignKey: 'optionId',  // Правильное имя внешнего ключа
-        otherKey: 'trailerId',     // Правильное имя внешнего ключа
+        foreignKey: 'optionId',
+        otherKey: 'trailerId',
       });
     }
   }
+  
   Option.init({
     id: {
       allowNull: false,
@@ -29,13 +29,22 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     price: {
-    type: DataTypes.STRING, // Или DataTypes.DECIMAL, в зависимости от требований
-    allowNull: false,
-    defaultValue: 0
-  },
-  image: {
+      type: DataTypes.DECIMAL(10, 2), // Изменено на DECIMAL
+      allowNull: false,
+      defaultValue: 0.00
+    },
+    image: {
       type: DataTypes.STRING,
       allowNull: true,
+    },
+    Backimage: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    position: { // Новое поле для порядка наложения
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
     },
   }, {
     sequelize,
@@ -43,5 +52,6 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'Options',
     timestamps: false,
   });
+  
   return Option;
 };

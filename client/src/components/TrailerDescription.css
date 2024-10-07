@@ -1,0 +1,248 @@
+/* TrailerDescription.css */
+
+/* Общие стили */
+.trailer-description {
+  position: relative;
+  width: 100vw;
+  height: 100vh; /* Высота блока с изображением */
+  text-align: center;
+  font-size: 26px;
+}
+
+.trailerdesck-image {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover; /* Изображение покрывает всю область */
+}
+
+.trailer-text,
+.trailer-text-l {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  text-align: left;
+  align-items: center;
+}
+
+.trailer-text {
+  right: 0;
+}
+
+.trailer-text-l {
+  left: 0;
+}
+
+.trailer-text h1,
+.trailer-text-l h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.trailer-text p,
+.trailer-text-l p {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.features-list {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.icon-wrapper {
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.img-wrapper img {
+  width: 50px;
+  height: 50px;
+}
+
+.text-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.feature-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.feature-description {
+  font-size: 1.2rem;
+  color: #ccc;
+  margin: 5px 0 0 0;
+}
+
+.buttons-container {
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.overlay-button.calculator-button,
+.overlay-button.company-button {
+  background-color: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+  margin-top: 20px;
+}
+
+.overlay-button.calculator-button:hover,
+.overlay-button.company-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Медиа-запросы для планшетов (макс. ширина 992px) */
+@media (max-width: 992px) {
+  .trailer-description {
+    height: auto;
+  }
+
+  .trailerdesck-image {
+    height: 50vh;
+  }
+
+  .trailer-text,
+  .trailer-text-l {
+    position: relative;
+    width: 100%;
+    height: auto;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .trailer-text h1,
+  .trailer-text-l h1 {
+    font-size: 2.5rem;
+  }
+
+  .trailer-text p,
+  .trailer-text-l p {
+    font-size: 1.2rem;
+  }
+
+  .feature-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .icon-wrapper {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .text-wrapper {
+    align-items: center;
+  }
+
+  .feature-title {
+    font-size: 1.5rem;
+  }
+
+  .feature-description {
+    font-size: 1rem;
+  }
+
+  .buttons-container {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .overlay-button.calculator-button,
+  .overlay-button.company-button {
+    width: 100%;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+  }
+}
+
+/* Медиа-запросы для мобильных телефонов (макс. ширина 576px) */
+@media (max-width: 576px) {
+  .trailer-description {
+    height: auto;
+  }
+
+  .trailerdesck-image {
+    height: 30vh;
+  }
+
+  .trailer-text,
+  .trailer-text-l {
+    padding: 10px;
+  }
+
+  .trailer-text h1,
+  .trailer-text-l h1 {
+    font-size: 2rem;
+  }
+
+  .trailer-text p,
+  .trailer-text-l p {
+    font-size: 1rem;
+  }
+
+  .feature-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .icon-wrapper {
+    margin-right: 0;
+    margin-bottom: 5px;
+  }
+
+  .img-wrapper img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .feature-title {
+    font-size: 1.2rem;
+  }
+
+  .feature-description {
+    font-size: 0.9rem;
+  }
+
+  .buttons-container {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .overlay-button.calculator-button,
+  .overlay-button.company-button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+  }
+}

@@ -9,7 +9,8 @@ import DatePicker from "react-datepicker";
 const { TextArea } = Input;
 
 function Users() {
-  const baseURL = "http://95.79.52.15:26336/";
+ // const baseURL = "http://95.79.52.15:26336/";
+  const baseURL = "http://192.168.0.149:5000/";
 
   const getListAPIName = "api/user/getAll";
   const addEditAPIName = "api/user/addEditUser";

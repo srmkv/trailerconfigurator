@@ -1,0 +1,56 @@
+// Start Bread Crumb Area
+.bread-crumb-area {
+  position: relative;
+  background-size: cover;
+  background-repeat: no-repeat;
+  text-align: center;
+  padding-top: 166px;
+  padding-bottom: 165px;
+  background-position: top center;
+  padding-right: 15px;
+  padding-left: 15px;
+  h2 {
+    font-size: 65px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 75px;
+    letter-spacing: -1.95px;
+    color: $text-color1;
+    font-family: $heading-font;
+    @media (max-width: 575px) {
+      font-size: 45px;
+      line-height: 55px;
+    }
+  }
+  .bread-crumb-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+    a,
+    span {
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 28px;
+      letter-spacing: -0.54px;
+      font-family: $body-font;
+      color: $text-color1;
+      transition-timing-function: linear;
+      transition-duration: 0.3s;
+      &span {
+        svg {
+          width: 10px !important;
+        }
+      }
+      &:hover {
+        color: $text-color2;
+      }
+      &.current-page {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+// End Bread Crumb Area

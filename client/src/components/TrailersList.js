@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Table, message as AntMessage } from "antd";
 
 function TrailerList() {
-  const baseURL = "http://95.79.52.15:26336/";
+  //const baseURL = "http://95.79.52.15:26336/";
+  const baseURL = "http://192.168.0.149:3000/";
   const getListAPIName = "api/trailer/getAll";
 
   const [trailers, setTrailers] = useState([]);
