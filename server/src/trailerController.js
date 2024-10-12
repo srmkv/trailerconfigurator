@@ -64,7 +64,9 @@ const trailerRoute = express.Router();
 // Получение всех трейлеров
 trailerRoute.get('/api/trailer/getAll', async (req, res) => {
     try {
-        const data = await Trailer.findAll();
+        const data = await Trailer.findAll({
+            order: [['_id', 'ASC']] // Сортировка по полю id по возрастанию (ASC)
+        });
         res.json({ status: true, data });
     } catch (e) {
         console.error('Error fetching trailers:', e);
@@ -82,9 +84,9 @@ trailerRoute.post('/api/trailer/addEditTrailer', upload.fields(
     console.log('Files:', req.files); // Для отладки
     console.log('Body:', req.body); // Для отладки
 
-    const { actionType, _id, Name, Price, Description } = req.body;
+    const { actionType, _id, Name, Price, Description, Size } = req.body;
 
-    if (!Name || !Price || !Description) {
+    if (!Name || !Price ) {
         return res.status(400).send('Missing required fields');
     }
 
@@ -110,6 +112,7 @@ trailerRoute.post('/api/trailer/addEditTrailer', upload.fields(
                 Name,
                 Price,
                 Description,
+                Size,
                 ...imageFields
             }, { where: { _id } });
             res.send({ status: true, message: 'Trailer updated successfully' });
@@ -118,6 +121,7 @@ trailerRoute.post('/api/trailer/addEditTrailer', upload.fields(
                 Name,
                 Price,
                 Description,
+                Size,
                 ...imageFields
             });
             res.send({ status: true, message: 'Trailer added successfully', data: trailer });

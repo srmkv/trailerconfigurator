@@ -36,6 +36,7 @@ function Trailers() {
     Name: "",
     Price: "",
     Description: "",
+    Size: "",
   };
 
   // Добавляем динамически поля для каждого цвета
@@ -52,7 +53,8 @@ function Trailers() {
   const [optionFormValues, setOptionFormValues] = useState({ 
     id: "", 
     name: "", 
-    description: "", 
+    description: "",
+
     price: "", 
     image: null,
     Backimage: null,
@@ -109,7 +111,7 @@ function Trailers() {
     formData.append('Name', addEditFormValues.Name);
     formData.append('Price', addEditFormValues.Price);
     formData.append('Description', addEditFormValues.Description);
-    
+    formData.append('Size', addEditFormValues.Size);
     // Добавляем изображения для каждого цвета
     colors.forEach(color => {
       if (addEditFormValues[color.front]) {
@@ -149,6 +151,7 @@ function Trailers() {
     const formData = new FormData();
     formData.append('name', optionFormValues.name);
     formData.append('description', optionFormValues.description);
+
     formData.append('price', optionFormValues.price);
     formData.append('trailerId', selectedTrailerId);
     formData.append('position', optionFormValues.position);  // Добавлено поле order
@@ -189,7 +192,7 @@ function Trailers() {
 
   // Обработка закрытия модального окна опций
   const handleOptionsCancel = () => {
-    setOptionFormValues({ id: "", name: "", description: "", price: "", image: null, Backimage: null, position: 0 });
+    setOptionFormValues({ id: "", name: "", description: "",  price: "", image: null, Backimage: null, position: 0 });
     setIsOptionsModalVisible(false);
   };
 
@@ -310,6 +313,7 @@ function Trailers() {
     { title: "Название", dataIndex: "Name", key: "Name" },
     { title: "Цена", dataIndex: "Price", key: "Price" },
     { title: "Описание", dataIndex: "Description", key: "Description" },
+     { title: "Размер", dataIndex: "Size", key: "Size" },
     {
       title: "Изображения",
       key: "images",
@@ -354,6 +358,7 @@ function Trailers() {
   const optionsColumns = [
     { title: "Название опции", dataIndex: "name", key: "name" },
     { title: "Описание опции", dataIndex: "description", key: "description" },
+   
     { title: "Цена опции", dataIndex: "price", key: "price" },
     { 
       title: "Порядок наложения", 
@@ -404,6 +409,7 @@ function Trailers() {
               id: record.id, 
               name: record.name, 
               description: record.description, 
+             
               price: record.price, 
               image: record.image,
               Backimage: record.Backimage,
@@ -460,8 +466,16 @@ function Trailers() {
               onChange={handleInputChange}
             />
           </Form.Item>
-          <Form.Item label="Описание">
+          <Form.Item label="Размер">
             <Input
+              placeholder="Размер"
+              name="Size"
+              value={addEditFormValues.Size}
+              onChange={handleInputChange}
+            />
+          </Form.Item>
+          <Form.Item label="Описание">
+            <Input.TextArea
               placeholder="Описание"
               name="Description"
               value={addEditFormValues.Description}

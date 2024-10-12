@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Checkbox, message as AntMessage, Select } from 'antd';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.css';
+
 import './TrailersWithOptions.css';
 
 const { Option } = Select;
@@ -170,34 +173,68 @@ const TrailersWithOptions = () => {
         </div>
         <div className="offer-wrapper">
           <div className="d-flex align-items-start">
-            <div
-              className="nav flex-column nav-pills me-2 col-xl-2 col-lg-6 col-md-12"
-              id="v-pills-tab"
-              role="tablist"
-              aria-orientation="vertical"
-            >
-              {trailers.map(trailer => (
-                <button
-                  key={trailer._id}
-                  className={`nav-link ${activeTab === `v-pills-${trailer._id}` ? 'active' : ''}`}
-                  id={`v-pills-${trailer._id}-tab`}
-                  type="button"
-                  role="tab"
-                  aria-controls={`v-pills-${trailer._id}`}
-                  aria-selected={activeTab === `v-pills-${trailer._id}`}
-                  onClick={() => setActiveTab(`v-pills-${trailer._id}`)}
-                >
-                  <img
-                    src={`${trailer.FrontImg}`}
-                    width="300px"
-                    alt={trailer.Name}
-                  />
-                  <h4 style={{ color: '#fff', textAlign: 'center' }}>
-                    {trailer.Name}
-                  </h4>
-                </button>
-              ))}
-            </div>
+            <div className="nav flex-column nav-pills me-2 col-xl-2 col-lg-6 col-md-12 d-none d-lg-block" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+  {trailers.map(trailer => (
+    <button
+      key={trailer._id}
+      className={`nav-link ${activeTab === `v-pills-${trailer._id}` ? 'active' : ''}`}
+      id={`v-pills-${trailer._id}-tab`}
+      type="button"
+      role="tab"
+      aria-controls={`v-pills-${trailer._id}`}
+      aria-selected={activeTab === `v-pills-${trailer._id}`}
+      onClick={() => setActiveTab(`v-pills-${trailer._id}`)}
+    >
+      <img
+        src={`${trailer.FrontImg}`}
+        width="300px"
+        alt={trailer.Name}
+      />
+      <h4 style={{ color: '#fff', textAlign: 'center' }}>{trailer.Name}</h4>
+    </button>
+  ))}
+</div>
+
+{/* Добавляем слайдер для мобильных устройств */}
+<div className="d-lg-none">
+  <Swiper
+    spaceBetween={10}  // Расстояние между слайдами
+    slidesPerView={1.2} // Показываем немного следующего слайда для эстетики
+    centeredSlides={true} // Центрируем слайды
+    breakpoints={{
+      // Настраиваем количество видимых слайдов в зависимости от ширины экрана
+      320: { slidesPerView: 2, spaceBetween: 10 },  // Для мобильных устройств
+      480: { slidesPerView: 2, spaceBetween: 10 }, // Для немного более широких экранов
+      640: { slidesPerView: 2, spaceBetween: 10 },  // Для планшетов и небольших экранов
+    }}
+  >
+    {trailers.map(trailer => (
+      <SwiperSlide key={trailer._id}>
+        <button
+          className={`nav-link ${activeTab === `v-pills-${trailer._id}` ? 'active' : ''}`}
+          id={`v-pills-${trailer._id}-tab`}
+          type="button"
+          role="tab"
+          aria-controls={`v-pills-${trailer._id}`}
+          aria-selected={activeTab === `v-pills-${trailer._id}`}
+          onClick={() => setActiveTab(`v-pills-${trailer._id}`)}
+          style={{ border: 'none', background: 'transparent', width: '100%' }}
+        >
+          <img
+            src={`${trailer.FrontImg}`}
+            alt={trailer.Name}
+            style={{ width: '100%', height: 'auto', maxWidth: '300px', margin: '0 auto' }} // Задаем максимальную ширину и авто высоту
+          />
+          <h4 style={{ color: '#fff', textAlign: 'center', fontSize: '18px', marginTop: '10px' }}>
+            {trailer.Name}
+          </h4>
+        </button>
+      </SwiperSlide>
+    ))}
+  </Swiper>
+</div>
+
+
             <div
               className="tab-content col-xl-10 col-lg-6 col-md-12"
               id="v-pills-tabContent"
@@ -314,6 +351,20 @@ const TrailersWithOptions = () => {
                       </div>
                       <div className="col-xl-4 col-lg-6 col-md-12">
                         <div className="offer-inner">
+                         <h5 className="font-size-1-24" style={{ color: '#ccff00' }}>
+                            Описание
+                          </h5>
+                          <pre style={{ color: 'rgb(255, 255, 255)',
+                            resize: 'none',  
+                            whiteSpace: 'pre-wrap',
+                            wordWrap: 'break-word',
+                            overflowWrap: 'break-word' 
+                           }} >{trailer.Description}</pre>
+                         <h5 className="font-size-1-24" style={{ color: '#ccff00' }}>
+                            Размер
+                          </h5>
+                          <span style={{ color: 'rgb(255, 255, 255)' }} >{trailer.Size}</span>
+                          
                           <h5 className="font-size-1-24" style={{ color: '#ccff00' }}>
                             Цвет
                           </h5>
