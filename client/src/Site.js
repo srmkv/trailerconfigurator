@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from './components/Header';
-import Footer from './components/Footer';
+
 import MobileMenu from './components/MobileMenu';
 import SearchBar from './components/SearchBar';
 import VideoPlayer from './components/VideoPlayer';
@@ -13,10 +13,13 @@ import TrailerDescription from './components/TrailerDescription';
 import TrailerDescription2 from './components/TrailerDescription2';
 import TrailerDescription3 from './components/TrailerDescription3';
 import TrailerDescription4 from './components/TrailerDescription4';
+import Footer from './components/Footer';
+
 function Site() {
   return (
     <div>
       <Header />
+     
       <MobileMenu />
       <SearchBar />
       <VideoPlayer />

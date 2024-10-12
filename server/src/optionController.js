@@ -2,17 +2,18 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs').promises;
 const multer = require('multer');
+const { transliterate } = require('transliteration');
+const sanitize = require('sanitize-filename');
+const { v4: uuidv4 } = require('uuid');
 const { Option, Trailer, TrailerOption } = require('../models');
+
+const optionRoute = express.Router();
 
 // Функция для создания директории, если она не существует
 const createDir = async (dir) => {
     try {
-        if (!(await fs.stat(dir).catch(() => false))) {
-            await fs.mkdir(dir, { recursive: true });
-            console.log(`Directory created: ${dir}`);
-        } else {
-            console.log(`Directory already exists: ${dir}`);
-        }
+        await fs.mkdir(dir, { recursive: true });
+        console.log(`Directory ensured: ${dir}`);
     } catch (err) {
         console.error(`Error creating directory ${dir}:`, err);
         throw err;
@@ -38,9 +39,20 @@ const storage = multer.diskStorage({
             }
         }
 
+        // Определяем поддиректорию на основе имени поля файла
+        let subDir;
+        if (file.fieldname.toLowerCase() === 'image') {
+            subDir = 'front';
+        } else if (file.fieldname.toLowerCase() === 'backimage') {
+            subDir = 'back';
+        } else {
+            // Если используется другое имя поля, можно задать стандартную директорию или вернуть ошибку
+            subDir = 'others';
+        }
+
         // Создаем путь к директории
-        const dir = path.join(__dirname, '../../client/public/uploads', trailerName, 'options');
-        console.log("Directory to create:", dir);
+        const dir = path.join(__dirname, '../../client/public/uploads', trailerName, 'options', subDir);
+        console.log("Directory to ensure:", dir);
 
         // Создаем директорию, если она не существует
         try {
@@ -51,16 +63,38 @@ const storage = multer.diskStorage({
         }
     },
     filename: (req, file, cb) => {
-        console.log(`Saving file: ${file.originalname}`);
-        cb(null, file.originalname);
+        const originalName = file.originalname;
+        console.log(`Original filename: ${originalName}`);
+        // Транслитерируем имя файла
+        let transliteratedName = transliterate(originalName);
+        console.log(`Transliterated filename: ${transliteratedName}`);
+        // Очищаем имя файла
+        transliteratedName = sanitize(transliteratedName);
+        console.log(`Sanitized filename: ${transliteratedName}`);
+        // Добавляем уникальный идентификатор для предотвращения конфликтов имен
+        const uniqueName = `${uuidv4()}_${transliteratedName}`;
+        console.log(`Final filename to save: ${uniqueName}`);
+        cb(null, uniqueName);
     }
 });
 
-const upload = multer({ storage });
+// Фильтр для разрешённых типов файлов (только изображения)
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+        cb(null, true);
+    } else {
+        cb(new Error('Only image files are allowed!'), false);
+    }
+};
 
-const optionRoute = express.Router();
+// Ограничение размера файла до 5MB
+const upload = multer({ 
+    storage,
+    fileFilter,
+    limits: { fileSize: 5 * 1024 * 1024 } // 5MB
+});
 
-// Получение всех опций для конкретного прицепа
+// Получение всех опций для конкретного трейлера
 optionRoute.get('/api/options/getAll', async (req, res) => {
     const { trailerId } = req.query;
 
@@ -72,16 +106,18 @@ optionRoute.get('/api/options/getAll', async (req, res) => {
                     attributes: []
                 },
                 where: { _id: trailerId }
-            }]
+            }],
+             order: [['id', 'ASC']]
         });
         res.json({ status: true, data: options });
     } catch (error) {
-        res.json({ status: false, message: error.message });
+        console.error('Error fetching options:', error);
+        res.status(500).json({ status: false, message: error.message });
     }
 });
 
 // Добавление новой опции и связывание её с трейлером
-optionRoute.post('/api/options/addOption',  upload.fields([{ name: 'image' }, { name: 'Backimage' }]), async (req, res) => {
+optionRoute.post('/api/options/addOption', upload.fields([{ name: 'image' }, { name: 'Backimage' }]), async (req, res) => {
     try {
         let { name, description, price, trailerId, trailerName } = req.body;
 
@@ -90,7 +126,7 @@ optionRoute.post('/api/options/addOption',  upload.fields([{ name: 'image' }, { 
             try {
                 const trailer = await Trailer.findByPk(trailerId);
                 if (trailer) {
-                    trailerName = trailer.Name; // Убедитесь, что поле "Name" существует в модели Trailer
+                    trailerName = trailer.Name;
                 } else {
                     return res.status(404).json({ status: false, message: 'Trailer not found' });
                 }
@@ -99,16 +135,25 @@ optionRoute.post('/api/options/addOption',  upload.fields([{ name: 'image' }, { 
             }
         }
 
-        // Формируем путь к изображению
-        const image = req.files['image'] ? `uploads/${trailerName}/options/${req.files['image'][0].filename}` : null;
-        const Backimage = req.files['Backimage'] ? `uploads/${trailerName}/options/${req.files['Backimage'][0].filename}` : null;
+        // Формируем пути к изображениям
+        const frontImage = req.files['image'] ? `uploads/${trailerName}/options/front/${req.files['image'][0].filename}` : null;
+        const backImage = req.files['Backimage'] ? `uploads/${trailerName}/options/back/${req.files['Backimage'][0].filename}` : null;
+        const originalFrontName = req.files['image'] ? req.files['image'][0].originalname : null;
+        const originalBackName = req.files['Backimage'] ? req.files['Backimage'][0].originalname : null;
 
-        if (!name || !description || !trailerId || !price) {
+        if (!name || !trailerId || !price) {
             return res.status(400).json({ status: false, message: 'All fields are required' });
         }
 
         // Создание опции
-        const option = await Option.create({ name, description, price, image, Backimage });
+        const option = await Option.create({ 
+            name, 
+            description, 
+            price, 
+            image: frontImage, 
+            Backimage: backImage,
+            originalName: originalFrontName || originalBackName // Сохранение оригинального имени (опционально)
+        });
 
         // Связывание опции с трейлером
         await TrailerOption.create({
@@ -117,41 +162,18 @@ optionRoute.post('/api/options/addOption',  upload.fields([{ name: 'image' }, { 
             price,
         });
 
-        res.json({ status: true, message: 'Option added successfully' });
+        res.json({ status: true, message: 'Option added successfully', data: option });
     } catch (error) {
         console.error('Error adding option:', error);
         res.status(500).json({ status: false, message: 'Something went wrong' });
     }
 });
 
-// Привязка опции к трейлеру
-optionRoute.post('/api/options/addToTrailer', async (req, res) => {
-    const { trailerId, optionId } = req.body;
-
-    if (!trailerId || !optionId) {
-        return res.status(400).send('Missing required fields');
-    }
-
-    try {
-        const trailer = await Trailer.findByPk(trailerId);
-        const option = await Option.findByPk(optionId);
-
-        if (!trailer || !option) {
-            return res.status(404).send('Trailer or Option not found');
-        }
-
-        await TrailerOption.create({ trailerId, optionId });
-        res.json({ status: true, message: 'Option added to trailer successfully' });
-    } catch (e) {
-        console.error('Error adding option to trailer:', e);
-        res.status(500).send('Server error');
-    }
-});
-
 // Редактирование опции
-optionRoute.put('/api/options/edit/:id',  upload.fields([{ name: 'image' }, { name: 'Backimage' }]), async (req, res) => {
+// Редактирование опции
+optionRoute.put('/api/options/edit/:id', upload.fields([{ name: 'image' }, { name: 'Backimage' }]), async (req, res) => {
     const { id } = req.params;
-    const { name, description, price, trailerId, position } = req.body;
+    const { name, description, price, trailerId, position, positionBack } = req.body;
 
     try {
         const option = await Option.findByPk(id);
@@ -159,9 +181,28 @@ optionRoute.put('/api/options/edit/:id',  upload.fields([{ name: 'image' }, { na
             return res.status(404).json({ status: false, message: 'Option not found' });
         }
 
+        // Получаем имя трейлера, если trailerId изменился
+        let trailerName = 'unknown';
+        if (trailerId) {
+            const trailer = await Trailer.findByPk(trailerId);
+            if (trailer) {
+                trailerName = trailer.Name;
+            } else {
+                return res.status(404).json({ status: false, message: 'Trailer not found' });
+            }
+        } else {
+            // Извлекаем из существующего пути
+            if (option.image) {
+                const parts = option.image.split('/');
+                if (parts.length > 1) { // Проверка на наличие trailerName в пути
+                    trailerName = parts[1]; // Предполагается, что путь имеет вид 'uploads/{trailerName}/options/front/{filename}'
+                }
+            }
+        }
+
         // Обновление пути к изображению, если загружено новое
         let image = option.image;
-        let Backimage = option.Backimage; // Объявляем переменную Backimage
+        let Backimage = option.Backimage;
 
         if (req.files['image']) {
             // Удаление старого изображения, если оно существует
@@ -171,9 +212,7 @@ optionRoute.put('/api/options/edit/:id',  upload.fields([{ name: 'image' }, { na
                     console.error(`Error deleting old image file: ${oldImagePath}`, err);
                 });
             }
-            const trailer = trailerId ? await Trailer.findByPk(trailerId) : null;
-            const trailerName = trailer ? trailer.Name : 'unknown';
-            image = `uploads/${trailerName}/options/${req.files['image'][0].filename}`;
+            image = `uploads/${trailerName}/options/front/${req.files['image'][0].filename}`;
         }
 
         if (req.files['Backimage']) {
@@ -184,19 +223,18 @@ optionRoute.put('/api/options/edit/:id',  upload.fields([{ name: 'image' }, { na
                     console.error(`Error deleting old back image file: ${oldBackImagePath}`, err);
                 });
             }
-            const trailer = trailerId ? await Trailer.findByPk(trailerId) : null;
-            const trailerName = trailer ? trailer.Name : 'unknown';
-            Backimage = `uploads/${trailerName}/options/${req.files['Backimage'][0].filename}`;
+            Backimage = `uploads/${trailerName}/options/back/${req.files['Backimage'][0].filename}`;
         }
 
         // Обновляем опцию
-        await option.update({ 
-            name: name || option.name, 
-            description: description || option.description, 
-            price: price || option.price, 
-            image: image || option.image,
-            Backimage: Backimage || option.Backimage,
-            position: position !== undefined ? parseInt(position, 10) : option.position // Обработка поля position
+        await option.update({
+            name: name || option.name,
+            description: description || option.description,
+            price: price || option.price,
+            image: image, // Если новое изображение не загружено, остается старое
+            Backimage: Backimage, // Если новое обратное изображение не загружено, остается старое
+            position: position !== undefined ? parseInt(position, 10) : option.position, // Обработка поля position
+            positionBack: positionBack !== undefined ? parseInt(positionBack, 10) : option.positionBack, // Обработка поля positionBack
         });
 
         res.json({ status: true, message: 'Option updated successfully', data: option });
@@ -205,6 +243,7 @@ optionRoute.put('/api/options/edit/:id',  upload.fields([{ name: 'image' }, { na
         res.status(500).json({ status: false, message: 'Something went wrong' });
     }
 });
+
 
 // Удаление опции
 optionRoute.delete('/api/options/delete/:id', async (req, res) => {

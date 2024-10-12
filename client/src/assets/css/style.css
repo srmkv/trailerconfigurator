@@ -2658,8 +2658,8 @@ a {
       overflow: hidden; }
 
 .offer-area-home-1 {
-  padding-top: 130px;
-  padding-bottom: 130px;
+  padding-top: 50px;
+  padding-bottom: 50px;
   position: relative;
   padding-right: 20px;
   padding-left: 20px; }
@@ -2833,12 +2833,7 @@ a {
           .about-area-home-1 .about-area-home-1-inner .about-point-text .about-point-info p br {
             display: none; } }
 
-.counter-area-home-1 {
-  position: relative;
-  padding-bottom: 75px;
-  padding-top: 130px;
-  padding-right: 20px;
-  padding-left: 20px; }
+
   @media (max-width: 991px) {
     .counter-area-home-1 {
       padding-top: 70px; } }

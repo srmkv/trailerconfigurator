@@ -8,7 +8,7 @@
 
 .imgblock {
   position: relative;
-  margin: 20px;
+ /* margin: 20px;*/
   border: 1px solid #ccff00;
   border-radius: 10px;
   margin-bottom: 10px;

@@ -1,8 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 const Header = () => {
+  const [isSticky, setIsSticky] = useState(false);
+  const headerRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsSticky(!entry.isIntersecting);
+      },
+      { threshold: 1, rootMargin: "-100px 0px 0px 0px" } // Настраиваем точку срабатывания
+    );
+
+    if (headerRef.current) {
+      observer.observe(headerRef.current);
+    }
+
+    return () => {
+      if (headerRef.current) {
+        observer.unobserve(headerRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <header className="header-area-1 header-sticky">
+    <header ref={headerRef} className={`header-area-1 header-sticky ${isSticky ? 'sticky-on' : ''}`}>
       <div className="header-wrapper">
         <div className="menu-bar">
           <a href="#" className="menu-bar-btn">
@@ -17,7 +39,6 @@ const Header = () => {
             <img src="assets/images/trailers/logo_voyage.png" alt="VRE" />
           </a>
         </div>
-        {/* Main Menu */}
         <div className="main-menu main-menu-1">
           <ul>
             <li><a href="#background-video" className="font-size-1-18 transition-1">Главная</a></li>

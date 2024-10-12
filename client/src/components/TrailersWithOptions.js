@@ -35,7 +35,7 @@ const TrailersWithOptions = () => {
   const [selectedOptions, setSelectedOptions] = useState({});
   const [trailerPrices, setTrailerPrices] = useState({});
   const [activeTab, setActiveTab] = useState('');
-  
+
   // Новое состояние для выбранных цветов трейлеров
   const [selectedColors, setSelectedColors] = useState({});
 
@@ -79,11 +79,22 @@ const TrailersWithOptions = () => {
       });
       const { status, data } = response.data;
       if (status) {
-        // Преобразуем position в число и сортируем по возрастанию
-        const sortedOptions = data
-          .map(option => ({ ...option, position: Number(option.position) }))
-          .sort((a, b) => a.position - b.position);
-        setOptions(prev => ({ ...prev, [trailerId]: sortedOptions }));
+        // Преобразуем position и positionBack в числа, добавляем backXPosition и backYPosition
+        const processedOptions = data.map(option => ({
+          ...option,
+          position: Number(option.position),
+          positionBack: Number(option.positionBack),
+          xPosition: Number(option.xPosition) || 0,
+          yPosition: Number(option.yPosition) || 0,
+          backXPosition: Number(option.backXPosition) || 0,
+          backYPosition: Number(option.backYPosition) || 0
+        }));
+
+        // Сохраняем опции как единый массив для трейлера
+        setOptions(prev => ({
+          ...prev,
+          [trailerId]: processedOptions
+        }));
       } else {
         setOptions(prev => ({ ...prev, [trailerId]: [] }));
       }
@@ -174,65 +185,65 @@ const TrailersWithOptions = () => {
         <div className="offer-wrapper">
           <div className="d-flex align-items-start">
             <div className="nav flex-column nav-pills me-2 col-xl-2 col-lg-6 col-md-12 d-none d-lg-block" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-  {trailers.map(trailer => (
-    <button
-      key={trailer._id}
-      className={`nav-link ${activeTab === `v-pills-${trailer._id}` ? 'active' : ''}`}
-      id={`v-pills-${trailer._id}-tab`}
-      type="button"
-      role="tab"
-      aria-controls={`v-pills-${trailer._id}`}
-      aria-selected={activeTab === `v-pills-${trailer._id}`}
-      onClick={() => setActiveTab(`v-pills-${trailer._id}`)}
-    >
-      <img
-        src={`${trailer.FrontImg}`}
-        width="300px"
-        alt={trailer.Name}
-      />
-      <h4 style={{ color: '#fff', textAlign: 'center' }}>{trailer.Name}</h4>
-    </button>
-  ))}
-</div>
+              {trailers.map(trailer => (
+                <button
+                  key={trailer._id}
+                  className={`nav-link ${activeTab === `v-pills-${trailer._id}` ? 'active' : ''}`}
+                  id={`v-pills-${trailer._id}-tab`}
+                  type="button"
+                  role="tab"
+                  aria-controls={`v-pills-${trailer._id}`}
+                  aria-selected={activeTab === `v-pills-${trailer._id}`}
+                  onClick={() => setActiveTab(`v-pills-${trailer._id}`)}
+                >
+                  <img
+                    src={`${trailer.FrontImg}`}
+                    width="300px"
+                    alt={trailer.Name}
+                  />
+                  <h4 style={{ color: '#fff', textAlign: 'center' }}>{trailer.Name}</h4>
+                </button>
+              ))}
+            </div>
 
-{/* Добавляем слайдер для мобильных устройств */}
-<div className="d-lg-none">
-  <Swiper
-    spaceBetween={10}  // Расстояние между слайдами
-    slidesPerView={1.2} // Показываем немного следующего слайда для эстетики
-    centeredSlides={true} // Центрируем слайды
-    breakpoints={{
-      // Настраиваем количество видимых слайдов в зависимости от ширины экрана
-      320: { slidesPerView: 2, spaceBetween: 10 },  // Для мобильных устройств
-      480: { slidesPerView: 2, spaceBetween: 10 }, // Для немного более широких экранов
-      640: { slidesPerView: 2, spaceBetween: 10 },  // Для планшетов и небольших экранов
-    }}
-  >
-    {trailers.map(trailer => (
-      <SwiperSlide key={trailer._id}>
-        <button
-          className={`nav-link ${activeTab === `v-pills-${trailer._id}` ? 'active' : ''}`}
-          id={`v-pills-${trailer._id}-tab`}
-          type="button"
-          role="tab"
-          aria-controls={`v-pills-${trailer._id}`}
-          aria-selected={activeTab === `v-pills-${trailer._id}`}
-          onClick={() => setActiveTab(`v-pills-${trailer._id}`)}
-          style={{ border: 'none', background: 'transparent', width: '100%' }}
-        >
-          <img
-            src={`${trailer.FrontImg}`}
-            alt={trailer.Name}
-            style={{ width: '100%', height: 'auto', maxWidth: '300px', margin: '0 auto' }} // Задаем максимальную ширину и авто высоту
-          />
-          <h4 style={{ color: '#fff', textAlign: 'center', fontSize: '18px', marginTop: '10px' }}>
-            {trailer.Name}
-          </h4>
-        </button>
-      </SwiperSlide>
-    ))}
-  </Swiper>
-</div>
+            {/* Добавляем слайдер для мобильных устройств */}
+            <div className="d-lg-none">
+              <Swiper
+                spaceBetween={10}  // Расстояние между слайдами
+                slidesPerView={1.2} // Показываем немного следующего слайда для эстетики
+                centeredSlides={true} // Центрируем слайды
+                breakpoints={{
+                  // Настраиваем количество видимых слайдов в зависимости от ширины экрана
+                  320: { slidesPerView: 2, spaceBetween: 10 },  // Для мобильных устройств
+                  480: { slidesPerView: 2, spaceBetween: 10 }, // Для немного более широких экранов
+                  640: { slidesPerView: 2, spaceBetween: 10 },  // Для планшетов и небольших экранов
+                }}
+              >
+                {trailers.map(trailer => (
+                  <SwiperSlide key={trailer._id}>
+                    <button
+                      className={`nav-link ${activeTab === `v-pills-${trailer._id}` ? 'active' : ''}`}
+                      id={`v-pills-${trailer._id}-tab`}
+                      type="button"
+                      role="tab"
+                      aria-controls={`v-pills-${trailer._id}`}
+                      aria-selected={activeTab === `v-pills-${trailer._id}`}
+                      onClick={() => setActiveTab(`v-pills-${trailer._id}`)}
+                      style={{ border: 'none', background: 'transparent', width: '100%' }}
+                    >
+                      <img
+                        src={`${trailer.FrontImg}`}
+                        alt={trailer.Name}
+                        style={{ width: '100%', height: 'auto', maxWidth: '300px', margin: '0 auto' }} // Задаем максимальную ширину и авто высоту
+                      />
+                      <h4 style={{ color: '#fff', textAlign: 'center', fontSize: '18px', marginTop: '10px' }}>
+                        {trailer.Name}
+                      </h4>
+                    </button>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
 
 
             <div
@@ -257,121 +268,102 @@ const TrailersWithOptions = () => {
                           <div className="imgblock">
                             <span className="imgtxt">Вид спереди</span>
                             <div className="relative-container front-view-container">
-                              {/* Опции с отрицательным position */}
-                              {options[trailer._id]?.filter(option => option.position < 0).map(option => (
-                                selectedOptions[trailer._id]?.[option.id] && option.image && (
-                                  <img
-                                    key={`front-negative-${option.id}`}
-                                    src={`${option.image}`}
-                                    alt={option.name}
-                                    className="option-image-front"
-                                    style={{
-                                      left: option.xPosition || 0,
-                                      top: option.yPosition || 0,
-                                      zIndex: 0, // Опции под основным изображением
-                                    }}
-                                  />
-                                )
-                              ))}
-
                               {/* Основное изображение трейлера на основе выбранного цвета */}
                               <img
                                 src={`${trailer[colorFields.front]}`}
                                 alt={trailer.Name}
                                 className="trailer-image"
-                                style={{ zIndex: 1 }} // Основное изображение
+                                style={{ zIndex: 0, position: 'relative' }} // Основное изображение
                               />
 
-                              {/* Опции с положительным position */}
-                              {options[trailer._id]?.filter(option => option.position >= 0).map(option => (
-                                selectedOptions[trailer._id]?.[option.id] && option.image && (
-                                  <img
-                                    key={`front-positive-${option.id}`}
-                                    src={`${option.image}`}
-                                    alt={option.name}
-                                    className="option-image-front"
-                                    style={{
-                                      left: option.xPosition || 0,
-                                      top: option.yPosition || 0,
-                                      zIndex: 2 + option.position, // Опции поверх основного изображения
-                                    }}
-                                  />
+                              {/* Опции с позициями для переднего вида */}
+                              {options[trailer._id]?.map(option => (
+                                selectedOptions[trailer._id]?.[option.id] && (
+                                  <>
+                                    {/* Переднее изображение опции */}
+                                    {option.image && (
+                                      <img
+                                        key={`front-${option.id}`}
+                                        src={`${option.image}`}
+                                        alt={`${option.name} Front`}
+                                        className="option-image-front"
+                                        style={{
+                                          position: 'absolute',
+                                          left: option.xPosition || 0,
+                                          top: option.yPosition || 0,
+                                          zIndex:  option.position, // Опции поверх основного изображения
+                                        }}
+                                      />
+                                    )}
+                                  </>
                                 )
                               ))}
                             </div>
                           </div>
+
                           {/* Блок для заднего вида */}
                           <div className="imgblock">
                             <span className="imgtxt">Вид сзади</span>
                             <div className="relative-container back-view-container">
-                              {/* Опции с отрицательным position */}
-                              {options[trailer._id]?.filter(option => option.position < 0).map(option => (
-                                selectedOptions[trailer._id]?.[option.id] && option.Backimage && (
-                                  <img
-                                    key={`back-negative-${option.id}`}
-                                    src={`${option.Backimage}`}
-                                    alt={`${option.name} Back`}
-                                    className="option-image-back"
-                                    style={{
-                                      left: option.backXPosition || 0,
-                                      top: option.backYPosition || 0,
-                                      zIndex: 0, // Опции под основным изображением
-                                    }}
-                                  />
-                                )
-                              ))}
-
                               {/* Основное изображение трейлера на основе выбранного цвета */}
                               <img
                                 src={`${trailer[colorFields.back]}`}
                                 alt={trailer.Name}
                                 className="trailer-image"
-                                style={{ zIndex: 1 }} // Основное изображение
+                                style={{ zIndex: 0, position: 'relative' }} // Основное изображение
                               />
 
-                              {/* Опции с положительным position */}
-                              {options[trailer._id]?.filter(option => option.position >= 0).map(option => (
-                                selectedOptions[trailer._id]?.[option.id] && option.Backimage && (
-                                  <img
-                                    key={`back-positive-${option.id}`}
-                                    src={`${option.Backimage}`}
-                                    alt={`${option.name} Back`}
-                                    className="option-image-back"
-                                    style={{
-                                      left: option.backXPosition || 0,
-                                      top: option.backYPosition || 0,
-                                      zIndex: 2 + option.position, // Опции поверх основного изображения
-                                    }}
-                                  />
+                              {/* Опции с позициями для заднего вида */}
+                              {options[trailer._id]?.map(option => (
+                                selectedOptions[trailer._id]?.[option.id] && (
+                                  <>
+                                    {/* Заднее изображение опции */}
+                                    {option.Backimage && (
+                                      <img
+                                        key={`back-${option.id}`}
+                                        src={`${option.Backimage}`}
+                                        alt={`${option.name} Back`}
+                                        className="option-image-back"
+                                        style={{
+                                          position: 'absolute',
+                                          left: option.backXPosition || 0,
+                                          top: option.backYPosition || 0,
+                                          zIndex:  option.positionBack, // Опции поверх основного изображения
+                                        }}
+                                      />
+                                    )}
+                                  </>
                                 )
                               ))}
                             </div>
                           </div>
                         </div>
                       </div>
+
                       <div className="col-xl-4 col-lg-6 col-md-12">
                         <div className="offer-inner">
-                         <h5 className="font-size-1-24" style={{ color: '#ccff00' }}>
+                          <h5 className="font-size-1-24" style={{ color: '#ccff00' }}>
                             Описание
                           </h5>
-                          <pre style={{ color: 'rgb(255, 255, 255)',
-                            resize: 'none',  
+                          <pre style={{
+                            color: 'rgb(255, 255, 255)',
+                            resize: 'none',
                             whiteSpace: 'pre-wrap',
                             wordWrap: 'break-word',
-                            overflowWrap: 'break-word' 
-                           }} >{trailer.Description}</pre>
-                         <h5 className="font-size-1-24" style={{ color: '#ccff00' }}>
+                            overflowWrap: 'break-word'
+                          }}>{trailer.Description}</pre>
+
+                          <h5 className="font-size-1-24" style={{ color: '#ccff00' }}>
                             Размер
                           </h5>
-                          <span style={{ color: 'rgb(255, 255, 255)' }} >{trailer.Size}</span>
-                          
+                          <span style={{ color: 'rgb(255, 255, 255)' }}>{trailer.Size}</span>
+
                           <h5 className="font-size-1-24" style={{ color: '#ccff00' }}>
                             Цвет
                           </h5>
                           <form style={{ color: '#fff' }}>
                             {/* Селектор цвета */}
                             <div style={{ marginBottom: '15px' }}>
-                              
                               <Select
                                 value={selectedColors[trailer._id] || 'Белый'}
                                 onChange={(value) => handleColorChange(trailer._id, value)}

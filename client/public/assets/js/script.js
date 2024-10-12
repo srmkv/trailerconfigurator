@@ -33,94 +33,10 @@
       vreJs.swiperActivation();
       vreJs.searchPopup();
       vreJs.wowAnimation();
-      vreJs.projectFilter();
-      vreJs.ProgressBar();
-      vreJs.scrollToTop();
+
     },
 
-    // Start Top To Scroll
-    scrollToTop: function () {
-      $(document).ready(function () {
-        let calcScrollValue = () => {
-          let scrollProgress = document.getElementById("progress");
-          let progressValue = document.getElementById("progress-value");
-          let pos = document.documentElement.scrollTop;
-          let calcHeight =
-            document.documentElement.scrollHeight -
-            document.documentElement.clientHeight;
-          let scrollValue = Math.round((pos * 100) / calcHeight);
-          if (pos > 100) {
-            scrollProgress.style.display = "grid";
-          } else {
-            scrollProgress.style.display = "none";
-          }
-          scrollProgress.addEventListener("click", () => {
-            document.documentElement.scrollTop = 0;
-          });
-          scrollProgress.style.background = `conic-gradient(#CCFF00 ${scrollValue}%, #CCDEFF ${scrollValue}%)`;
-        };
-
-        window.onscroll = calcScrollValue;
-        window.onload = calcScrollValue;
-      });
-    },
-    // End Top To Scroll
-
-    // Start Progress Bar
-    ProgressBar: function () {
-      $(document).ready(function () {
-        var skillPers = document.querySelectorAll(".skill-per");
-
-        skillPers.forEach(function (skillPer) {
-          var datapercentage = parseFloat(
-            skillPer.getAttribute("data-percentage")
-          );
-          skillPer.style.width = datapercentage + "%";
-
-          var animatedValue = 0;
-          var startTime = null;
-
-          function animate(timestamp) {
-            if (!startTime) startTime = timestamp;
-            var progress = timestamp - startTime;
-            var stepPercentage = progress / 5000; // Dividing by duration in milliseconds (1000ms = 1s)
-
-            if (stepPercentage < 1) {
-              animatedValue = datapercentage * stepPercentage;
-              skillPer.setAttribute(
-                "data-percentage",
-                Math.floor(animatedValue) + "%"
-              );
-              requestAnimationFrame(animate);
-            } else {
-              animatedValue = datapercentage;
-              skillPer.setAttribute(
-                "data-percentage",
-                Math.floor(animatedValue) + "%"
-              );
-            }
-          }
-
-          requestAnimationFrame(animate);
-        });
-      });
-    },
-    // End Progress Bar
-
-    // Start Project Filter
-    projectFilter: function () {
-      $(document).ready(function () {
-        var $grid = $(".project-grid-active").isotope({
-          // options
-        });
-        // filter items on button click
-        $(".project-grid-btn").on("click", "li", function () {
-          var filterValue = $(this).attr("data-filter");
-          $grid.isotope({ filter: filterValue });
-        });
-      });
-    },
-    // End Project Filter
+ 
 
     // Start Wow Animation
     wowAnimation: function () {

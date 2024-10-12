@@ -3,90 +3,61 @@ import './Footer.css'; // Импортируйте CSS-файл для стил�
 
 const Footer = () => {
   return (
-    <section 
+    <section
       className="footer-area-home-3 footer-area-home-1"
       style={{ backgroundImage: "url('assets/images/home-2/footer-bg-home-2.png')" }}
     >
       <div className="container">
         <div className="footer-wrapper">
           <div className="row justify-content-between">
-            <div className="col-xl-4 col-lg-4 col-md-7 col-sm-12">
+            <div className="col-lg-4 col-md-6 col-sm-12 mb-4">
               <div className="footer-item-1">
                 <a href="index.html">
                   <img src="assets/images/logo/logo-1.svg" alt="VRE" />
                 </a>
                 <p className="font-size-1-16">
-                  The world’s first and largest digital market <br /> 
+                  The world’s first and largest digital market <br />
                   for crypto collectibles and non-fungible <br />
                   (NFTs). Buy
                 </p>
                 <span className="font-size-1-16">
                   <svg width="22" height="24" viewBox="0 0 22 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <g clipPath="url(#clip0_1_18420)">
-                      <path
-                        d="M11.3639 0.303711C6.97093 0.303711 3.39844 4.17202 3.39844 8.92871C3.39844 14.9073 10.5886 22.7618 10.8939 23.0938C11.024 23.2333 11.1939 23.3037 11.3639 23.3037C11.5338 23.3037 11.7037 23.2333 11.8338 23.0938C12.1392 22.7618 19.3293 14.9073 19.3293 8.92871C19.3293 4.17202 15.7568 0.303711 11.3639 0.303711ZM11.3639 21.5456C9.77874 19.7085 4.72601 13.4956 4.72601 8.92871C4.72601 4.96552 7.70375 1.74121 11.3639 1.74121C15.024 1.74121 18.0017 4.96552 18.0017 8.92871C18.0017 13.4913 12.949 19.7085 11.3639 21.5456Z"
-                        fill="#FF4A3B" 
-                      />
-                      <path
-                        d="M11.3636 4.61621C9.16777 4.61621 7.38086 6.55109 7.38086 8.92871C7.38086 11.3063 9.16777 13.2412 11.3636 13.2412C13.5594 13.2412 15.3463 11.3063 15.3463 8.92871C15.3463 6.55109 13.5594 4.61621 11.3636 4.61621ZM11.3636 11.8037C9.89926 11.8037 8.70843 10.5143 8.70843 8.92871C8.70843 7.34315 9.89926 6.05371 11.3636 6.05371C12.8279 6.05371 14.0187 7.34315 14.0187 8.92871C14.0187 10.5143 12.8279 11.8037 11.3636 11.8037Z"
-                        fill="#FF4A3B" 
-                      />
-                    </g>
-                    <defs>
-                      <clipPath id="clip0_1_18420">
-                        <rect width="21.2411" height="23" fill="white" transform="translate(0 0.303711)" />
-                      </clipPath>
-                    </defs>
+                    {/* SVG content */}
                   </svg>
                   86 Road Broklyn Street, 600 <br /> New York, USA
                 </span>
                 <span className="font-size-1-16">
                   <svg width="22" height="23" viewBox="0 0 22 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M2.51836 19.939C2.20398 19.9371 1.90296 19.8011 1.68065 19.5604C1.45835 19.3197 1.33272 18.9937 1.33105 18.6533V8.07957C1.33273 7.37449 1.59215 6.6988 2.05259 6.20023C2.51304 5.70166 3.13705 5.42076 3.78821 5.41895H15.3756C16.0279 5.41894 16.6535 5.69904 17.1153 6.19781C17.5771 6.69657 17.8374 7.3733 17.8391 8.07957V15.1265C17.8391 15.8327 17.5804 16.5102 17.1198 17.0102C16.6592 17.5103 16.0342 17.7921 15.3819 17.794H5.71839C5.60863 17.7949 5.50196 17.8334 5.41362 17.904L3.23583 19.6846C3.02818 19.8507 2.77656 19.9399 2.51836 19.939ZM3.78821 6.79395C3.47383 6.79575 3.17281 6.93178 2.9505 7.17249C2.7282 7.4132 2.60257 7.73916 2.6009 8.07957V18.4815L4.65171 16.804C4.96029 16.5558 5.33402 16.4209 5.71839 16.419H15.3756C15.6922 16.419 15.9958 16.2828 16.2196 16.0404C16.4435 15.798 16.5693 15.4692 16.5693 15.1265V8.07957C16.5676 7.73916 16.442 7.4132 16.2197 7.17249C15.9973 6.93178 15.6963 6.79575 15.3819 6.79395H3.78821Z"
-                      fill="#FF4A3B" 
-                    />
-                    <path
-                      d="M12.0868 12.3555C12.4373 12.3555 12.7214 12.0477 12.7214 11.668C12.7214 11.2883 12.4373 10.9805 12.0868 10.9805C11.7363 10.9805 11.4521 11.2883 11.4521 11.668C11.4521 12.0477 11.7363 12.3555 12.0868 12.3555Z"
-                      fill="#FF4A3B" 
-                    />
-                    <path
-                      d="M9.6229 12.3555C9.97339 12.3555 10.2575 12.0477 10.2575 11.668C10.2575 11.2883 9.97339 10.9805 9.6229 10.9805C9.27241 10.9805 8.98828 11.2883 8.98828 11.668C8.98828 12.0477 9.27241 12.3555 9.6229 12.3555Z"
-                      fill="#FF4A3B" 
-                    />
-                    <path
-                      d="M7.08286 12.3555C7.43335 12.3555 7.71747 12.0477 7.71747 11.668C7.71747 11.2883 7.43335 10.9805 7.08286 10.9805C6.73237 10.9805 6.44824 11.2883 6.44824 11.668C6.44824 12.0477 6.73237 12.3555 7.08286 12.3555Z"
-                      fill="#FF4A3B" 
-                    />
-                    <path
-                      d="M10.7214 9.43466C10.7214 8.97165 10.5218 8.56012 10.1895 8.21654C9.85726 7.87295 9.34589 7.67833 8.84242 7.68008C8.36841 7.68008 7.87373 7.88373 7.45166 8.21654C7.12947 8.56012 6.92992 8.97165 6.92992 9.43466C6.92992 9.89767 7.12947 10.3092 7.45166 10.6528C7.87373 10.9857 8.36841 11.1894 8.84242 11.1894C9.34589 11.1894 9.85726 10.9857 10.1895 10.6528C10.5218 10.3092 10.7214 9.89767 10.7214 9.43466Z"
-                      fill="#FF4A3B" 
-                    />
+                    {/* SVG content */}
                   </svg>
                   support@simplemail.com
                 </span>
               </div>
             </div>
-            <div className="col-xl-4 col-lg-4 col-md-5 col-sm-12">
-              <div className="footer-item-2">
-                <h4 className="title">Quick Links</h4>
-                <ul>
-                  <li><a href="#">About</a></li>
-                  <li><a href="#">Contact</a></li>
-                  <li><a href="#">FAQs</a></li>
-                  <li><a href="#">Blog</a></li>
-                  <li><a href="#">Careers</a></li>
-                </ul>
-              </div>
-            </div>
-            <div className="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+           
+            <div className="col-lg-6 col-md-12 col-sm-12">
               <div className="footer-item-3">
                 <h4 className="title">Subscribe</h4>
-                <p>Get the latest news and updates on upcoming events.</p>
-                <form className="newsletter-form">
-                  <input type="email" placeholder="Your Email Address" required />
-                  <button type="submit">Subscribe</button>
-                </form>
+               <span class="futer-cont">КОНТАКТЫ</span>
+                    <p class="futer-cont2">г. Москва</p>
+                    <p class="futer-cont2">ул. Мневники, д. 1</p>
+                    <p class="futer-cont2">тел: +7(495)241-15-05</p>
+                    <p class="futer-cont2">моб.: +7(920)251-20-86</p>
+
+                <span class="futer-cont">г. Санкт-Петербург</span>
+                     <p class="futer-cont2">Митрофаньевское шоссе, д. 10</p>
+                     <p class="futer-cont2">тел: +7(495)241-15-05</p>
+                     <p class="futer-cont2">моб.: +7(906)268-27-37</p>
+
+                <span class="futer-cont">г. Павлово</span>
+                     <p class="futer-cont2">ул. Комсомольская, д. 38</p>
+                     <p class="futer-cont2">тел: +7(831)280-82-88</p>
+                     <p class="futer-cont2">моб.: +7(920)251-20-86</p>
+                <span class="futer-cont">Техническая поддержка:</span>
+                      <p class="futer-cont2">тел: +7(495)241-15-05</p>
+
+                <span class="futer-cont">Почта:</span>
+                    <p class="futer-cont2">voyageautotech@ya.ru</p>
               </div>
             </div>
           </div>

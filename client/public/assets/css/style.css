@@ -6992,3 +6992,12 @@ a {
    border:1px solid #817f7e!important;
    background: none!important; 
 }
+.futer-cont{
+  font-size: 24px;
+  color: #fff;
+  /*  font-family: 'CentureG';*/
+}
+.futer-cont2{
+  font-size: 20px;
+  color: #fff;
+}

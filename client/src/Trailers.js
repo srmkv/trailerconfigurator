@@ -46,19 +46,24 @@ function Trailers() {
   });
 
   const [addEditFormValues, setAddEditFormValues] = useState(initialFormValues);
-  const [options, setOptions] = useState([]);
+  
+  // Инициализация options как объекта, где ключ — trailerId, значение — массив опций
+  const [options, setOptions] = useState({});
+  
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isOptionsModalVisible, setIsOptionsModalVisible] = useState(false);
   const [selectedTrailerId, setSelectedTrailerId] = useState(null);
+  
+  // Инициализация состояния для формы опции
   const [optionFormValues, setOptionFormValues] = useState({ 
     id: "", 
     name: "", 
     description: "",
-
     price: "", 
     image: null,
     Backimage: null,
-    position: 0  // Новое поле для порядка наложения
+    position: 0,  
+    positionBack: 0 // Исправлено: positionback -> positionBack
   });
 
   // Получение списка трейлеров при монтировании компонента
@@ -86,20 +91,41 @@ function Trailers() {
   // Функция для получения опций конкретного трейлера
   const getOptionsForTrailer = async (trailerId) => {
     try {
-      const response = await axios.get(`${baseURL}${getOptionsAPIName}?trailerId=${trailerId}`);
+      const response = await axios.get(`${baseURL}${getOptionsAPIName}`, {
+        params: { trailerId }
+      });
       const { status, data } = response.data;
+      
       if (status) {
-        // Сортировка опций по полю position (по возрастанию)
-        const sortedOptions = data.sort((a, b) => a.position - b.position);
-        setOptions(sortedOptions);
+        // Преобразуем position и positionBack в числа, добавляем backXPosition и backYPosition
+        const processedOptions = data.map(option => ({
+          ...option,
+          position: Number(option.position),
+          positionBack: Number(option.positionBack), // Исправлено: positionback -> positionBack
+          xPosition: Number(option.xPosition) || 0,
+          yPosition: Number(option.yPosition) || 0,
+          backXPosition: Number(option.backXPosition) || 0,
+          backYPosition: Number(option.backYPosition) || 0
+        }));
+
+        // Сохраняем опции как единый массив для трейлера
+        setOptions(prev => ({
+          ...prev,
+          [trailerId]: processedOptions
+        }));
       } else {
-        setOptions([]);
+        // Если статус неудачный, очищаем опции для данного трейлера
+        setOptions(prev => ({
+          ...prev,
+          [trailerId]: []
+        }));
       }
     } catch (error) {
       console.error('Error fetching options:', error);
       AntMessage.error('Ошибка при получении опций.');
     }
   };
+
 
   // Обработка сохранения трейлера (добавление или редактирование)
   const handleOk = async () => {
@@ -112,6 +138,7 @@ function Trailers() {
     formData.append('Price', addEditFormValues.Price);
     formData.append('Description', addEditFormValues.Description);
     formData.append('Size', addEditFormValues.Size);
+    
     // Добавляем изображения для каждого цвета
     colors.forEach(color => {
       if (addEditFormValues[color.front]) {
@@ -154,8 +181,8 @@ function Trailers() {
 
     formData.append('price', optionFormValues.price);
     formData.append('trailerId', selectedTrailerId);
-    formData.append('position', optionFormValues.position);  // Добавлено поле order
-
+    formData.append('position', optionFormValues.position);  
+    formData.append('positionBack', optionFormValues.positionBack); // Исправлено: positionback -> positionBack
     if (optionFormValues.image) {
       formData.append('image', optionFormValues.image);
     }
@@ -192,7 +219,7 @@ function Trailers() {
 
   // Обработка закрытия модального окна опций
   const handleOptionsCancel = () => {
-    setOptionFormValues({ id: "", name: "", description: "",  price: "", image: null, Backimage: null, position: 0 });
+    setOptionFormValues({ id: "", name: "", description: "",  price: "", image: null, Backimage: null, position: 0, positionBack: 0 }); // Исправлено: positionback -> positionBack
     setIsOptionsModalVisible(false);
   };
 
@@ -313,15 +340,15 @@ function Trailers() {
     { title: "Название", dataIndex: "Name", key: "Name" },
     { title: "Цена", dataIndex: "Price", key: "Price" },
     { title: "Описание", dataIndex: "Description", key: "Description" },
-     { title: "Размер", dataIndex: "Size", key: "Size" },
+    { title: "Размер", dataIndex: "Size", key: "Size" },
     {
       title: "Изображения",
       key: "images",
       render: (text, record) => (
         <div>
           {colors.map(color => (
-            <div key={color.label} style={{ marginBottom: '10px' ,display: 'flex'}}>
-              <strong>{color.label}:</strong><br/>
+            <div key={color.label} style={{ marginBottom: '10px' ,display: 'flex', alignItems: 'center' }}>
+              <strong style={{ marginRight: '5px' }}>{color.label}:</strong>
               {record[color.front] && (
                 <img
                   src={renderImagePreview(record[color.front])}
@@ -358,10 +385,9 @@ function Trailers() {
   const optionsColumns = [
     { title: "Название опции", dataIndex: "name", key: "name" },
     { title: "Описание опции", dataIndex: "description", key: "description" },
-   
     { title: "Цена опции", dataIndex: "price", key: "price" },
     { 
-      title: "Порядок наложения", 
+      title: "Порядок наложения Front", 
       dataIndex: "position", 
       key: "position",
       sorter: (a, b) => a.position - b.position,
@@ -369,6 +395,17 @@ function Trailers() {
         position > 0 ? `Поверх (Порядок: ${position})` :
         position < 0 ? `Под (Порядок: ${position})` :
         `Основное изображение (${position})`
+      )
+    },
+    { 
+      title: "Порядок наложения Back", 
+      dataIndex: "positionBack", // Исправлено: positionback -> positionBack
+      key: "positionBack",       // Исправлено: positionback -> positionBack
+      sorter: (a, b) => a.positionBack - b.positionBack, // Исправлено: positionback -> positionBack
+      render: (positionBack) => (
+        positionBack > 0 ? `Поверх (Порядок: ${positionBack})` :
+        positionBack < 0 ? `Под (Порядок: ${positionBack})` :
+        `Основное изображение (${positionBack})`
       )
     },
     {
@@ -386,7 +423,7 @@ function Trailers() {
       )
     },
     {
-      title: "Обратное изображение опции",
+      title: "Заднее изображение опции",
       dataIndex: "Backimage",
       key: "Backimage",
       render: (Backimage) => (
@@ -409,11 +446,11 @@ function Trailers() {
               id: record.id, 
               name: record.name, 
               description: record.description, 
-             
               price: record.price, 
               image: record.image,
               Backimage: record.Backimage,
-              position: record.position 
+              position: record.position,
+              positionBack: record.positionBack // Исправлено: positionback -> positionBack 
             });
             setIsOptionsModalVisible(true);
           }}>Редактировать</Button>{" "}
@@ -557,13 +594,27 @@ function Trailers() {
               onChange={(e) => handleOptionInputChange(e.target.value, 'description')}
             />
           </Form.Item>
-          <Form.Item label="Порядок наложения">
+          <Form.Item label="Порядок наложения Front">
             <Input
               type="number"
               placeholder="Введите числовой порядок (например, -2, -1, 1, 2)"
               name="position"
               value={optionFormValues.position}
               onChange={(e) => handleOptionInputChange(parseInt(e.target.value, 10) || 0, 'position')}
+            />
+            <div style={{ marginTop: '5px', color: '#888' }}>
+              Значение меньше 0: под основным изображением<br/>
+              Значение больше 0: поверх основного изображения<br/>
+              Значение 0: основное изображение
+            </div>
+          </Form.Item>
+          <Form.Item label="Порядок наложения Back">
+            <Input
+              type="number"
+              placeholder="Введите числовой порядок (например, -2, -1, 1, 2)"
+              name="positionBack" // Исправлено: positionback -> positionBack
+              value={optionFormValues.positionBack} // Исправлено: positionback -> positionBack
+              onChange={(e) => handleOptionInputChange(parseInt(e.target.value, 10) || 0, 'positionBack')} // Исправлено
             />
             <div style={{ marginTop: '5px', color: '#888' }}>
               Значение меньше 0: под основным изображением<br/>
@@ -612,7 +663,11 @@ function Trailers() {
         <Table
           rowKey={(record) => record.id}
           columns={optionsColumns}
-          dataSource={options}
+          dataSource={
+            selectedTrailerId && options[selectedTrailerId] 
+              ? options[selectedTrailerId] // Исправлено: убрано задвоение
+              : []
+          }
           pagination={{ pageSize: 5 }}
         />
       </Modal>
