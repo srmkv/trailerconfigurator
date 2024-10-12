@@ -4,12 +4,22 @@ const Header = () => {
   const [isSticky, setIsSticky] = useState(false);
   const headerRef = useRef(null);
 
+  // Функция плавного скролла к указанной секции
+  const scrollToSection = (event, id) => {
+    event.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // Используем IntersectionObserver для липкого заголовка
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsSticky(!entry.isIntersecting);
       },
-      { threshold: 1, rootMargin: "-100px 0px 0px 0px" } // Настраиваем точку срабатывания
+      { threshold: 1, rootMargin: "-100px 0px 0px 0px" }
     );
 
     if (headerRef.current) {
@@ -41,12 +51,36 @@ const Header = () => {
         </div>
         <div className="main-menu main-menu-1">
           <ul>
-            <li><a href="#background-video" className="font-size-1-18 transition-1">Главная</a></li>
-            <li><a href="#about" className="font-size-1-18 transition-1">О нас</a></li>
-            <li><a href="#calculator" className="font-size-1-18 transition-1">Калькулятор</a></li>
-            <li><a href="#benefits" className="font-size-1-18 transition-1">Преимущества</a></li>
-            <li><a href="#video" className="font-size-1-18 transition-1">Видеообзор</a></li>
-            <li><a href="#contact" className="font-size-1-18 transition-1">Контакты</a></li>
+            <li>
+              <a href="#background-video" className="font-size-1-18 transition-1" onClick={(e) => scrollToSection(e, 'background-video')}>
+                Главная
+              </a>
+            </li>
+            <li>
+              <a href="#about" className="font-size-1-18 transition-1" onClick={(e) => scrollToSection(e, 'about')}>
+                О нас
+              </a>
+            </li>
+            <li>
+              <a href="#calculator" className="font-size-1-18 transition-1" onClick={(e) => scrollToSection(e, 'calculator')}>
+                Калькулятор
+              </a>
+            </li>
+            <li>
+              <a href="#benefits" className="font-size-1-18 transition-1" onClick={(e) => scrollToSection(e, 'benefits')}>
+                Преимущества
+              </a>
+            </li>
+            <li>
+              <a href="#video" className="font-size-1-18 transition-1" onClick={(e) => scrollToSection(e, 'video')}>
+                Видеообзор
+              </a>
+            </li>
+            <li>
+              <a href="#contact" className="font-size-1-18 transition-1" onClick={(e) => scrollToSection(e, 'contact')}>
+                Контакты
+              </a>
+            </li>
           </ul>
         </div>
       </div>

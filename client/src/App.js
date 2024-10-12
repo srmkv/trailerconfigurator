@@ -19,19 +19,7 @@ function App() {
   return (
     <Router>
       <div>
-        <nav className="nav-buttons">
-          <ul>
-            <li>
-              <Link to="/users" className="button-link">Users</Link>
-            </li>
-            <li>
-              <Link to="/trailers" className="button-link">Trailers</Link>
-            </li>
-            <li>
-              <Link to="/options" className="button-link">Options</Link>
-            </li>
-          </ul>
-        </nav>
+       
         <Routes>
          
           <Route path="/list" element={<TrailersList />} />

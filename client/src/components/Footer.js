@@ -12,26 +12,11 @@ const Footer = () => {
           <div className="row justify-content-between">
             <div className="col-lg-4 col-md-6 col-sm-12 mb-4">
               <div className="footer-item-1">
-                <a href="index.html">
-                  <img src="assets/images/logo/logo-1.svg" alt="VRE" />
-                </a>
-                <p className="font-size-1-16">
-                  The world’s first and largest digital market <br />
-                  for crypto collectibles and non-fungible <br />
-                  (NFTs). Buy
-                </p>
-                <span className="font-size-1-16">
-                  <svg width="22" height="24" viewBox="0 0 22 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    {/* SVG content */}
-                  </svg>
-                  86 Road Broklyn Street, 600 <br /> New York, USA
-                </span>
-                <span className="font-size-1-16">
-                  <svg width="22" height="23" viewBox="0 0 22 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    {/* SVG content */}
-                  </svg>
-                  support@simplemail.com
-                </span>
+                <div className="logo">
+                  <a href="index.html">
+                    <img src="assets/images/trailers/logo_voyage.png" alt="VRE" />
+                  </a>
+                </div>
               </div>
             </div>
            
