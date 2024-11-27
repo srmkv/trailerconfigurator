@@ -1,0 +1,40 @@
+/* C25Modal.css */
+
+.popup-image-slider {
+  margin-bottom: 20px;
+}
+
+.popup-image {
+  width: 100%;
+  height: auto;
+}
+
+.icon-row-popup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.icon-image-popup {
+  width: 30px;
+  height: 30px;
+}
+
+.popup-description {
+  margin-bottom: 10px;
+}
+/* IndividualModal.css */
+
+/* Класс для зелёной кнопки */
+.green-button {
+  background-color: #52c41a !important; /* Зелёный цвет Ant Design */
+  border-color: #52c41a !important;
+  color: #fff !important; /* Белый текст */
+}
+
+.green-button:hover,
+.green-button:focus {
+  background-color: #73d13d !important; /* Более светлый зелёный при наведении */
+  border-color: #73d13d !important;
+}

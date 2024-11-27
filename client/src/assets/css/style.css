@@ -750,7 +750,7 @@ a {
       width: 19%; }
       @media (max-width: 1465px) {
         .header-area-1.header-area-2 .header-wrapper .get-in-touch {
-          width: 22%; } }
+          width: 20%; } }
       @media (max-width: 1060px) {
         .header-area-1.header-area-2 .header-wrapper .get-in-touch {
           width: 36%; } }
@@ -1058,10 +1058,10 @@ a {
                 color: #CCFF00; }
         @media (max-width: 1370px) {
           .header-area-1 .header-wrapper .main-menu ul li {
-            margin: 0 25px; } }
+            margin: 0 5px; } }
         @media (max-width: 1299px) {
           .header-area-1 .header-wrapper .main-menu ul li {
-            margin: 0 16px; } }
+            margin: 0 5px; } }
         .header-area-1 .header-wrapper .main-menu ul li a {
           position: relative; }
           .header-area-1 .header-wrapper .main-menu ul li a:hover {
@@ -1084,19 +1084,19 @@ a {
       -webkit-box-align: center;
       -ms-flex-align: center;
       align-items: center;
-      gap: 30px;
+      gap: 20px;
       width: 27%; }
       @media (max-width: 1499px) {
         .header-area-1 .header-wrapper .get-in-touch {
           width: 20%;
-          gap: 40px; } }
+          gap: 10px; } }
       @media (max-width: 1199px) {
         .header-area-1 .header-wrapper .get-in-touch {
           width: 30%;
           -webkit-box-pack: end;
           -ms-flex-pack: end;
           justify-content: end;
-          gap: 60px;
+          gap: 10px;
           padding-right: 40px; } }
       @media (max-width: 810px) {
         .header-area-1 .header-wrapper .get-in-touch {
@@ -1120,8 +1120,7 @@ a {
           position: relative;
           margin-left: -5px; }
           @media (max-width: 1199px) {
-            .header-area-1 .header-wrapper .get-in-touch a:first-child {
-              display: none; } }
+             }
           .header-area-1 .header-wrapper .get-in-touch a:first-child:hover span svg {
             -webkit-transition-timing-function: linear;
             -o-transition-timing-function: linear;
@@ -2473,6 +2472,7 @@ a {
   width: 80%;
   max-width: 600px; }
   @media (max-width: 1200px) {
+    
     .accordion-container {
       width: 95%; } }
   @media (max-width: 991px) {
@@ -6988,14 +6988,7 @@ a {
    background: none!important; 
    border-radius: 10px;
 }
-.phone-numbers {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Выравнивание по левому краю */
-  gap: 8px; /* Отступ между элементами */
-  color: #d1d1d1;
-    font-size: 20px;
-}
+
 
 .logotip{
       margin: 0 auto;
@@ -7047,6 +7040,7 @@ a {
   color: #d1d1d1;
     font-size: 20px;
 }
+
 .rem1{
       margin-bottom: 1rem;
 }

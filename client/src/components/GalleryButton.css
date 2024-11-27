@@ -11,7 +11,7 @@
   content: ''; /* Создаем линии */
   position: absolute;
   top: 50%; /* Центрируем по вертикали */
-  width: 40%; /* Ширина линий (можно регулировать) */
+  width: 35%; /* Ширина линий (можно регулировать) */
   height: 2px; /* Толщина линии */
   background-color: #CCFF00; /* Цвет линии */
   transform: translateY(-50%); /* Центровка по вертикали */
@@ -49,11 +49,10 @@
   .centered-button-container::before,
 .centered-button-container::after {
   
-  width: 20%; 
+  width: 0%;
 }
 .centered-button-container {
   
-  height: 100px; /* Высота блока */
- 
+  height: 100px;
 }
 }

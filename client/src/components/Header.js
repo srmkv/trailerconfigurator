@@ -95,10 +95,7 @@ const Header = ({ onOpenPopup }) => { // Принимаем onOpenPopup чере
           </ul>
         </div>
         <div className="get-in-touch">
-          <div className="phone-numbers">
-            <span className="font-size-1-14">+7(495)241-15-05</span>
-            <span className="font-size-1-14"> +7(920)251-20-86</span>
-          </div>
+          
 
           <a href="https://t.me/voyageclassic" target="_blank" rel="nofollow noopener" className="icon-soc">
             <img width="30px" src="/uploads/soc/telegram.svg" alt="Telegram" />
@@ -123,13 +120,7 @@ const Header = ({ onOpenPopup }) => { // Принимаем onOpenPopup чере
             <img width="30px" src="/uploads/soc/vk.svg" alt="VK" />
           </a>
           
-          {/* Удалите или оставьте кнопку "Контакты" в зависимости от необходимости */}
-          {/* Если хотите оставить только пункт меню "Контакты", удалите следующую кнопку */}
-          {/* 
-          <button className="contacts-button but-fut" onClick={onOpenPopup} style={{ marginLeft: '10px' }}>
-            Контакты
-          </button> 
-          */}
+       
         </div>
       </div>
     </header>

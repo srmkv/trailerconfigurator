@@ -76,6 +76,7 @@ const MyGallery = () => {
         <button className="gallery-button" onClick={() => handleFilterChange('C301')}>С30(1300мм)</button>
         <button className="gallery-button" onClick={() => handleFilterChange('C35')}>C35</button>
         <button className="gallery-button" onClick={() => handleFilterChange('C36')}>C36</button>
+        <button className="gallery-button" onClick={() => handleFilterChange('Individual')}>Individual</button>
       </div>
       <LightGallery speed={500} plugins={[lgThumbnail, lgZoom]} elementClassNames="gallery-grid">
         {filteredImages.map((image) => (
