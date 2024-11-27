@@ -1,0 +1,22 @@
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #121B1D;
+  display: flex;
+  flex-direction: column; /* Вертикальное расположение элементов */
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.preloader img {
+  margin-bottom: 10px; /* Отступ между изображениями */
+}
+
+.preloader-image {
+  width: 150px; /* Измените размер, если нужно */
+  height: auto;
+}

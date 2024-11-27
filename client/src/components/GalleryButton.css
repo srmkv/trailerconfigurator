@@ -1,0 +1,59 @@
+.centered-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px; /* Высота блока */
+  position: relative; /* Для позиционирования псевдоэлементов */
+}
+
+.centered-button-container::before,
+.centered-button-container::after {
+  content: ''; /* Создаем линии */
+  position: absolute;
+  top: 50%; /* Центрируем по вертикали */
+  width: 40%; /* Ширина линий (можно регулировать) */
+  height: 2px; /* Толщина линии */
+  background-color: #CCFF00; /* Цвет линии */
+  transform: translateY(-50%); /* Центровка по вертикали */
+}
+
+.centered-button-container::before {
+  left: 0; /* Линия слева */
+}
+
+.centered-button-container::after {
+  right: 0; /* Линия справа */
+}
+
+.centered-button {
+  background-color: transparent; /* Прозрачный фон */
+  border: 3px solid #fff; /* Белый бордер */
+  color: #fff; /* Белый цвет текста */
+  padding: 10px 30px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+  margin: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.centered-button:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* Легкое затемнение фона при наведении */
+  color: #CCFF00; /* Цвет текста при наведении */
+}
+
+@media (max-width: 768px) {
+
+  .centered-button-container::before,
+.centered-button-container::after {
+  
+  width: 20%; 
+}
+.centered-button-container {
+  
+  height: 100px; /* Высота блока */
+ 
+}
+}

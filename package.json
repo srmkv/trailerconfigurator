@@ -1,0 +1,17 @@
+{
+  "name": "trailer",
+  "version": "1.0.0",
+  "description": "A simple records add, edit, delete and view using PostgresSQL , Express.js, React.js, and Node.js Create, Read, Update, and Delete operations. REST API was implemented on the back-end. Ant design React was used for the UI.",
+  "main": "index.js",
+   "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "npm run start --prefix server",
+    "client": "npm run start --prefix client"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}

@@ -1,0 +1,257 @@
+/* CatalogProduct.css */
+
+.catalog-container {
+  width: 90%;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+/* Сетка продуктов */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15%, 1fr));
+  gap: 20px;
+}
+
+.product-card {
+   border:1px solid #b6e403;
+  border-radius: 10px;
+   color:#fff;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.product-title {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #fff;
+  min-height: 1em; /* Минимальная высота для выравнивания */
+  line-height: 1em; /* Межстрочное расстояние для обеспечения двух строк */
+  overflow: hidden; /* Скрывает лишний текст, если он превышает высоту */
+  text-overflow: ellipsis; /* Добавляет "..." для длинного текста (если нужно) */
+  white-space: normal; /* Позволяет перенос строк */
+}
+
+
+/* Стили для внутреннего слайдера изображений */
+.product-image-slider {
+  margin-bottom: 15px;
+}
+
+.slider-image-wrapper {
+  position: relative;
+  padding: 0 10px;
+}
+
+.product-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  
+  border-radius: 5px;
+}
+.icon-row {
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: center;
+  align-items: center; 
+  gap: 5px;
+  border-radius: 10px;
+  background: #fff;
+    padding: 5px;
+    margin-bottom: 15px;
+}
+
+.icon-image {
+ 
+  width: 30px;
+
+  object-fit: cover; 
+}
+.icon-row-popup {
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: center;
+  align-items: center; 
+  gap: 5px;
+ 
+    margin-bottom: 15px;
+}
+
+.icon-image-popup {
+ 
+  width: 30px;
+
+  object-fit: cover; 
+}
+.product-description {
+  font-size: 0.9em;
+   color:#fff;
+  margin-bottom: 15px;
+  text-align: left;
+  flex-grow: 1;
+}
+
+.product-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  align-self: center;
+}
+
+.product-button:hover {
+  background-color: #0056b3;
+}
+.overlay-buttonslide {
+  background-color: transparent; /* Прозрачный фон */
+  border: 3px solid #fff; /* Белый бордер */
+  color: #fff; /* Белый цвет текста */
+  padding: 10px 30px;
+    font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+  margin: 10px;
+  align-items: center;
+  justify-content: center;
+}
+.blsrc{
+      display: flex;
+    justify-content: center;
+}
+
+.overlay-buttonslideBlack {
+  background-color: transparent; /* Прозрачный фон */
+  border: 3px solid #000; /* Белый бордер */
+  color: #000; /* Белый цвет текста */
+  padding: 10px 30px;
+    font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+  margin: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay-buttonslide:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* Легкое затемнение фона при наведении */
+   color: #CCFF00;/* Цвет текста при наведении */
+}
+/* Адаптивность */
+@media (max-width: 1200px) {
+   .product-title {
+  font-size: 16px;
+ 
+}
+.product-description {
+    font-size: 0.75em;
+  }
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(25%, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .product-title {
+  font-size: 16px;
+ 
+}
+  .product-image {
+    height: 150px;
+  }
+
+  .product-description {
+    font-size: 0.75em;
+  }
+}
+
+@media (max-width: 480px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(50%, 1fr));
+  }
+
+  .product-image {
+    height: 120px;
+  }
+
+  .product-description {
+    display: none; /* Скрыть описание на маленьких экранах для экономии места */
+  }
+
+  .product-button {
+    padding: 8px 16px;
+    font-size: 0.9em;
+  }
+}
+.slick-prev, .slick-next{
+  margin-left: 0.8rem;
+  margin-right: 0.8rem;
+}
+
+
+/* Popup Styles */
+.popup-overlay {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999999999;
+}
+
+.popup-content {
+  max-height: 80vh; /* Set max height to 80% of the viewport height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.popup-title {
+  margin-bottom: 20px;
+}
+
+.popup-image-slider {
+  margin-bottom: 20px;
+}
+
+.popup-description {
+  margin-bottom: 20px;
+}
+
+.close-button {
+  background-color: #ff0000;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.slimg{
+  max-width: 500px;
+  margin: 0 auto;
+}

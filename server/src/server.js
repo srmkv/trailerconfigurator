@@ -7,6 +7,8 @@ const cors = require('cors');
 const userRoute = require('./userController');
 const trailerRoute = require('./trailerController');
 const optionRoute = require('./optionController');
+const orderRoute = require('./orderController');
+
 
 // Middleware
 app.use(cors());
@@ -16,11 +18,13 @@ app.use(bodyParser.json());
 // Serve static files from the "uploads" directory
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
+
+
 // Routes
 app.use(userRoute);
 app.use(trailerRoute);
 app.use(optionRoute);
-
+app.use(orderRoute);
 // Serve React app
 app.use(express.static(path.join(__dirname, '../client/build')));
 

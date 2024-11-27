@@ -41,6 +41,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    poryadok: { // Новое поле для порядка наложения
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
     position: { // Новое поле для порядка наложения
       type: DataTypes.INTEGER,
       allowNull: false,

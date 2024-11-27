@@ -5,7 +5,7 @@ const MarqueArea = () => {
     <div id="marque" className="marque-area-home-3 marque-area-home-1">
       <img
         width="50%"
-        src="assets/images/trailers/0024.jpg"
+        src="assets/images/trailers/0024.webp"
         alt="VRE"
       />
       <div className="marque-1">

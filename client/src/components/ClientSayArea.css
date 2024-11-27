@@ -1,0 +1,127 @@
+/* Основные стили для секции отзывов */
+.client-say-area-home-3 {
+  position: relative;
+  padding: 60px 20px;
+
+}
+
+.client-say-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: -1;
+}
+
+.client-say-title {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.font-size-1-45 {
+  font-size: 1.45rem;
+}
+
+.client-say-wrapper {
+  position: relative;
+}
+
+.client-say-inner {
+
+  padding: 20px;
+  border-radius: 8px;
+ /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);*/
+  text-align: center;
+}
+
+.font-size-1-35 {
+  font-size: 1.35rem;
+  margin-top: 15px;
+}
+
+.font-size-1-18 {
+  font-size: 1.18rem;
+  color: #777;
+}
+
+.client-work-name {
+  display: block;
+  margin-top: 5px;
+}
+
+/* Стили навигационных кнопок */
+.slider-btn-1.slider-client-say-home-3-btn {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  pointer-events: none; /* Чтобы кнопки не перекрывали слайды */
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all; /* Разрешаем клики */
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.swiper-button-next svg,
+.swiper-button-prev svg {
+  fill: #fff;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    width: 36px;
+    height: 36px;
+  }
+
+  .font-size-1-45 {
+    font-size: 1.2rem;
+  }
+
+  .font-size-1-35 {
+    font-size: 1.2rem;
+  }
+
+  .font-size-1-18 {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    width: 30px;
+    height: 30px;
+  }
+
+  .font-size-1-45 {
+    font-size: 1rem;
+  }
+
+  .font-size-1-35 {
+    font-size: 1rem;
+  }
+
+  .font-size-1-18 {
+    font-size: 0.9rem;
+  }
+}

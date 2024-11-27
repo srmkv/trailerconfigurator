@@ -1,0 +1,71 @@
+/* styles.css */
+.product-slider {
+  padding: 20px;
+}
+
+.product-card {
+  border:1px solid #b6e403;
+  border-radius: 10px;
+  padding: 20px;
+  color:#fff;
+  text-align: center;
+  margin: 0 15px;
+}
+
+.product-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.buy-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.buy-button:hover {
+  background-color: #0056b3;
+}
+.overlay-buttonslide {
+  background-color: transparent; /* Прозрачный фон */
+  border: 3px solid #fff; /* Белый бордер */
+  color: #fff; /* Белый цвет текста */
+  padding: 10px 30px;
+    font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+  margin: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay-buttonslide:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* Легкое затемнение фона при наведении */
+  color: #fff; /* Цвет текста при наведении */
+}
+
+@media (max-width: 992px) {
+ 
+
+  .overlay-buttonslide {
+    padding: 12px 25px;
+    font-size: 1.5rem;
+  }
+}
+
+/* Медиа-запросы для мобильных телефонов (макс. ширина 576px) */
+@media (max-width: 576px) {
+  
+
+  .overlay-buttonslide {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    width: 100%; /* Кнопки занимают всю ширину контейнера */
+  }
+
+}

@@ -1,0 +1,14 @@
+.center-text-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ 
+  text-align: center;
+  
+}
+
+.center-text {
+  font-size: 14px; /* Размер шрифта */
+  font-family: Arial, sans-serif; /* Шрифт */
+  color: #fff; /* Цвет текста */
+}

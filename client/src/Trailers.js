@@ -9,13 +9,14 @@ const colors = [
   { label: 'Красный', front: 'FrontImgRed', back: 'BackImgRed' },
   { label: 'Серый', front: 'FrontImgGray', back: 'BackImgGray' },
   { label: 'Синий', front: 'FrontImgBlue', back: 'BackImgBlue' },
-  { label: 'Хакки', front: 'FrontImgHaki', back: 'BackImgHaki' },
+  { label: 'Хаки', front: 'FrontImgHaki', back: 'BackImgHaki' },
   { label: 'Черный', front: 'FrontImgBlack', back: 'BackImgBlack' },
 ];
 
 function Trailers() {
   // Базовый URL API
-  const baseURL = "http://192.168.0.149:5000/";
+  //const baseURL = "http://192.168.0.149:5000/";
+  const baseURL = "http://95.79.52.15:5000/";
   
   // Названия API эндпоинтов
   const getListAPIName = "api/trailer/getAll";
@@ -56,7 +57,8 @@ function Trailers() {
   
   // Инициализация состояния для формы опции
   const [optionFormValues, setOptionFormValues] = useState({ 
-    id: "", 
+    id: "",
+    poryadok: "",  
     name: "", 
     description: "",
     price: "", 
@@ -176,6 +178,7 @@ function Trailers() {
   // Обработка сохранения опции (добавление или редактирование)
   const handleOptionsOk = async () => {
     const formData = new FormData();
+    formData.append('poryadok', optionFormValues.poryadok);
     formData.append('name', optionFormValues.name);
     formData.append('description', optionFormValues.description);
 
@@ -219,7 +222,7 @@ function Trailers() {
 
   // Обработка закрытия модального окна опций
   const handleOptionsCancel = () => {
-    setOptionFormValues({ id: "", name: "", description: "",  price: "", image: null, Backimage: null, position: 0, positionBack: 0 }); // Исправлено: positionback -> positionBack
+    setOptionFormValues({ id: "",poryadok:"", name: "", description: "",  price: "", image: null, Backimage: null, position: 0, positionBack: 0 }); // Исправлено: positionback -> positionBack
     setIsOptionsModalVisible(false);
   };
 
@@ -339,7 +342,14 @@ function Trailers() {
   const columns = [
     { title: "Название", dataIndex: "Name", key: "Name" },
     { title: "Цена", dataIndex: "Price", key: "Price" },
-    { title: "Описание", dataIndex: "Description", key: "Description" },
+    { title: "Описание", dataIndex: "Description", key: "Description",
+      render: (Description) => (
+        <pre>
+          {Description}
+        </pre>
+      )
+
+     },
     { title: "Размер", dataIndex: "Size", key: "Size" },
     {
       title: "Изображения",
@@ -383,6 +393,7 @@ function Trailers() {
 
   // Колонки для таблицы опций
   const optionsColumns = [
+    { title: "Позиция опции", dataIndex: "poryadok", key: "poryadok" },
     { title: "Название опции", dataIndex: "name", key: "name" },
     { title: "Описание опции", dataIndex: "description", key: "description" },
     { title: "Цена опции", dataIndex: "price", key: "price" },
@@ -443,7 +454,8 @@ function Trailers() {
         <>
           <Button type="primary" onClick={() => {
             setOptionFormValues({ 
-              id: record.id, 
+              id: record.id,
+              poryadok: record.poryadok, 
               name: record.name, 
               description: record.description, 
               price: record.price, 
@@ -570,6 +582,15 @@ function Trailers() {
       >
         {/* Форма для добавления/редактирования опции */}
         <Form layout="vertical">
+          <Form.Item label="Порядок опции">
+            <Input
+              type="number"
+              placeholder="Порядок опции"
+              name="name"
+              value={optionFormValues.poryadok}
+              onChange={(e) => handleOptionInputChange(e.target.value, 'poryadok')}
+            />
+          </Form.Item>
           <Form.Item label="Название опции">
             <Input
               placeholder="Название опции"
@@ -668,7 +689,7 @@ function Trailers() {
               ? options[selectedTrailerId] // Исправлено: убрано задвоение
               : []
           }
-          pagination={{ pageSize: 5 }}
+          pagination={{ pageSize: 10 }}
         />
       </Modal>
 

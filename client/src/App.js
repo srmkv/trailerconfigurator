@@ -4,7 +4,9 @@ import Users from "./Users";
 import Trailers from "./Trailers";
 import Site from "./Site";
 import TrailersList from './components/TrailersList';
+import Gallery from './components/Gallery';
 import TrailersWithOptions from './components/TrailersWithOptions';
+
 import './App.css';  // Подключаем CSS файл для стилей
 
 
@@ -21,7 +23,7 @@ function App() {
       <div>
        
         <Routes>
-         
+          <Route path="/gallery" element={<Gallery />} />
           <Route path="/list" element={<TrailersList />} />
           <Route path="/users" element={<Users />} />
           <Route path="/trailers" element={<Trailers />} />

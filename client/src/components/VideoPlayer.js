@@ -12,8 +12,8 @@ const VideoPlayer = () => {
 
   return (
     <div className="video-container">
-      <video id="background-video" autoPlay loop muted poster="https://assets.codepen.io/6093409/river.jpg">
-        <source src="assets/images/videoplayback1.mp4" type="video/mp4" />
+      <video id="background-video" autoPlay loop muted poster="/assets/images/trailers/0024.webp">
+        <source src="assets/images/Webmm.webm" type="video/webm" />
       </video>
       <div className="overlay-buttons">
         <button

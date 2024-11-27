@@ -66,7 +66,7 @@ a {
   font-size: 18px;
   font-weight: 500;
   line-height: normal;
-  color: #CCDEFF;
+  color: #d1d1d1;
   font-family: "Jost", sans-serif; }
 
 .font-size-1-20 {
@@ -397,7 +397,7 @@ a {
   .title .main-title h3 {
     margin: 0;
     padding: 0;
-    font-size: 50px;
+    font-size: 1.75rem;
     font-style: normal;
     font-weight: 700;
     font-family: "Nunito", sans-serif;
@@ -1007,7 +1007,7 @@ a {
           display: none; } }
       .header-area-1 .header-wrapper .main-menu ul li {
         display: inline-block;
-        margin: 0 30px;
+        margin: 0 8px;
         -webkit-box-align: center;
         -ms-flex-align: center;
         align-items: center;
@@ -1084,7 +1084,7 @@ a {
       -webkit-box-align: center;
       -ms-flex-align: center;
       align-items: center;
-      gap: 70px;
+      gap: 30px;
       width: 27%; }
       @media (max-width: 1499px) {
         .header-area-1 .header-wrapper .get-in-touch {
@@ -5297,7 +5297,7 @@ a {
     color: #CCDEFF;
     font-family: "Jost", sans-serif;
     text-align: center;
-    font-size: 35px;
+    font-size: 18px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -6987,4 +6987,86 @@ a {
    border:1px solid #817f7e!important;
    background: none!important; 
    border-radius: 10px;
+}
+.phone-numbers {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Выравнивание по левому краю */
+  gap: 8px; /* Отступ между элементами */
+  color: #d1d1d1;
+    font-size: 20px;
+}
+
+.logotip{
+      margin: 0 auto;
+    width: 200px;
+}
+.nav-link.active{
+   border:1px solid #817f7e!important;
+   background: none!important; 
+}
+.futer-cont{
+  font-size: 18px;
+  margin: 15px 0;
+  color: #d1d1d1;
+  border-bottom: 1px solid #d1d1d1;
+  /*  font-family: 'CentureG';*/
+}
+.futer-cont2{
+  font-size: 14px;
+  color: #d1d1d1;
+  padding:10px;
+}
+.futer-cont3{
+  font-size: 14px;
+  color: #CCFF00;
+  padding:10px;
+}
+
+#background-video {
+   width: 100vw;
+   height: 90vh;
+   object-fit: cover;
+   
+   left: 0;
+   right: 0;
+   top: 0;
+   bottom: 0;
+   z-index: -1;
+}
+.nav-link.active{
+   border:1px solid #817f7e!important;
+   background: none!important; 
+   border-radius: 10px;
+}
+.phone-numbers {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Выравнивание по левому краю */
+  gap: 8px; /* Отступ между элементами */
+  color: #d1d1d1;
+    font-size: 20px;
+}
+.rem1{
+      margin-bottom: 1rem;
+}
+.main-menu.main-menu-1 ul li a {
+  display: inline-block; /* Позволяет задавать размеры и отступы */
+  padding: 10px 15px; /* Отступы вокруг текста */
+  margin: 5px 0; /* Вертикальные отступы между пунктами (опционально) */
+  color: #fff; /* Цвет текста */
+  text-decoration: none; /* Убирает подчеркивание */
+  border: 2px solid transparent; /* Прозрачная граница по умолчанию */
+  border-radius: 4px; /* Закругленные углы (опционально) */
+  transition: border-color 0.3s ease, background-color 0.3s ease; /* Плавный переход для границы и фона */
+}
+
+/* Стили при наведении курсора мыши */
+.main-menu.main-menu-1 ul li a:hover {
+  border-color: #fff; /* Цвет границы при наведении */
+  
+}
+.icon-soc{
+  background: #fff;
+    border-radius: 10px;
 }

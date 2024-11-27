@@ -107,7 +107,7 @@ optionRoute.get('/api/options/getAll', async (req, res) => {
                 },
                 where: { _id: trailerId }
             }],
-             order: [['id', 'ASC']]
+             order: [['poryadok', 'ASC']]
         });
         res.json({ status: true, data: options });
     } catch (error) {
@@ -119,7 +119,7 @@ optionRoute.get('/api/options/getAll', async (req, res) => {
 // Добавление новой опции и связывание её с трейлером
 optionRoute.post('/api/options/addOption', upload.fields([{ name: 'image' }, { name: 'Backimage' }]), async (req, res) => {
     try {
-        let { name, description, price, trailerId, trailerName } = req.body;
+        let { name,poryadok, description, price, trailerId, trailerName } = req.body;
 
         // Получаем имя трейлера из базы данных, если его нет в запросе
         if (!trailerName) {
@@ -147,7 +147,8 @@ optionRoute.post('/api/options/addOption', upload.fields([{ name: 'image' }, { n
 
         // Создание опции
         const option = await Option.create({ 
-            name, 
+            name,
+            poryadok,
             description, 
             price, 
             image: frontImage, 
@@ -169,11 +170,11 @@ optionRoute.post('/api/options/addOption', upload.fields([{ name: 'image' }, { n
     }
 });
 
-// Редактирование опции
+
 // Редактирование опции
 optionRoute.put('/api/options/edit/:id', upload.fields([{ name: 'image' }, { name: 'Backimage' }]), async (req, res) => {
     const { id } = req.params;
-    const { name, description, price, trailerId, position, positionBack } = req.body;
+    const { name, poryadok, description, price, trailerId, position, positionBack } = req.body;
 
     try {
         const option = await Option.findByPk(id);
@@ -229,6 +230,7 @@ optionRoute.put('/api/options/edit/:id', upload.fields([{ name: 'image' }, { nam
         // Обновляем опцию
         await option.update({
             name: name || option.name,
+            poryadok: poryadok || option.poryadok,
             description: description || option.description,
             price: price || option.price,
             image: image, // Если новое изображение не загружено, остается старое

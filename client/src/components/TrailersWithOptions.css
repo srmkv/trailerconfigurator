@@ -32,7 +32,7 @@
 }
 
 .trailer-image {
-  width: 100%;
+  width: 80%;
   height: auto;
   display: block;
   position: relative;
@@ -42,7 +42,7 @@
 .option-image-front,
 .option-image-back {
   position: absolute;
-  width: 100%; /* Настройте размеры по необходимости */
+  width: 80%; /* Настройте размеры по необходимости */
   height: auto; /* Настройте размеры по необходимости */
   /* Удаляем z-index из CSS, будем устанавливать через inline-стили */
 }
@@ -58,7 +58,7 @@
 }
 
 .nav-link img {
-  max-width: 100%;
+  max-width: 80%;
   height: auto;
 }
 
@@ -75,7 +75,10 @@
 .font-size-1-14 {
   font-size: 1.14rem;
 }
-
+.ant-select-selection-item{
+  font-weight: 700; /* Жирный текст */
+  color: inherit;   /* Сохраняет общий цвет текста */
+}
 .txtoption,
 .txt2option,
 .imgtxt {
@@ -83,7 +86,7 @@
 }
 
 .container-calk {
-  width: 85vw;
+  width: 70vw;
   margin: 0 auto;
 }
 
